@@ -73,6 +73,8 @@ func (t *BlockChainRealEstate) Invoke(stub shim.ChaincodeStubInterface) pb.Respo
 		return api.QueryDonatingListByGrantee(stub, args)
 	case "updateDonating":
 		return api.UpdateDonating(stub, args)
+	case "register":
+		return api.Register(stub,args)
 	default:
 		return shim.Error(fmt.Sprintf("没有该功能: %s", funcName))
 	}

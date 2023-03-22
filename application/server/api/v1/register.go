@@ -2,14 +2,13 @@ package v1
 
 import (
 	"application/pkg/app"
-	"crypto/sha256"
 	"fmt"
 	"net/http"
+	"bytes"
+	"encoding/json"
+	bc "application/blockchain"
 
 	"github.com/gin-gonic/gin"
-	"fabric-realty/chaincode/pkg/utils"
-	"fabric-realty/chaincode/model"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
 type RegisterData struct {
@@ -22,30 +21,29 @@ type RegisterData struct {
 func Register(c *gin.Context) {
 	appG := app.Gin{C: c}
 	reqBody := new(RegisterData)
-	if err := c.BindJSON(&reqBody); err != nil {
+	if err := c.ShouldBind(reqBody); err != nil {
 		appG.Response(http.StatusBadRequest, "失败", fmt.Sprintf("参数出错%s", err.Error()))
 		return
 	}
-	// 在这里可以对前端传来的数据进行处理，例如将密码加密后存入数据库等等
-	// 将用户名和密码合并成一个字符串
-	combined := reqBody.Username + reqBody.Password
+	var bodyBytes [][]byte
+	bodyBytes = append(bodyBytes, []byte(reqBody.Username))
+	bodyBytes = append(bodyBytes, []byte(reqBody.Password))
 
-	// 使用SHA-256算法进行hash
-	hashed := sha256.Sum256([]byte(combined))
-	// 将hash结果转换为16进制字符串
-    hashStr := fmt.Sprintf("%x", hashed)
-
-	account := &model.Account{
-		AccountId: hashStr,
-		UserName:  reqBody.Username,
-		Balance:   5000000,
+	//调用智能合约
+	resp, err := bc.ChannelExecute("register", bodyBytes)
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, "失败", err.Error())
+		return
 	}
-	
-	// 写入账本
-	if err := utils.WriteLedger(account, stub, model.AccountKey, []string{hashStr}); err != nil {
-		return shim.Error(fmt.Sprintf("%s", err))
+	var data map[string]interface{}
+	if err = json.Unmarshal(bytes.NewBuffer(resp.Payload).Bytes(), &data); err != nil {
+		appG.Response(http.StatusInternalServerError, "失败", err.Error())
+		return
 	}
 
 	// 假设处理完毕后，将数据存入数据库成功
-	appG.Response(http.StatusOK, "成功", "注册成功")
+	if len(data) != 0 {
+		appG.Response(http.StatusOK, "成功", "注册成功")
+	}
+	// appG.Response(http.StatusOK, "成功", "注册成功")
 }

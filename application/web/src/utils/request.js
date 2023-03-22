@@ -13,7 +13,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      MessageBox.alert('服务器开小差了', 'error', {
+      MessageBox.alert('服务器开小差了1111'+res.code, 'error', {
         confirmButtonText: '确定',
         type: 'warning'
       })

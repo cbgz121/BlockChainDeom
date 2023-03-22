@@ -9,10 +9,19 @@ export function queryAccountList() {
 }
 
 // 登录
-export function login(data) {
+export function login(logindata) {
   return request({
     url: '/queryAccountList',
     method: 'post',
-    data
+    data:logindata
   })
 }
+
+export function register(registerdata) {
+  return request({
+    url: '/register',
+    method: 'post',
+    data: registerdata
+  })
+}
+
