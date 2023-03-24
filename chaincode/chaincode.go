@@ -4,6 +4,7 @@ import (
 	"chaincode/api"
 	"chaincode/model"
 	"chaincode/pkg/utils"
+	"crypto/sha256"
 	"fmt"
 	"time"
 
@@ -18,27 +19,27 @@ type BlockChainRealEstate struct {
 func (t *BlockChainRealEstate) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("链码初始化")
 	//初始化默认数据
-	var accountIds = [6]string{
-		"5feceb66ffc8",
-		"6b86b273ff34",
-		"d4735e3a265e",
-		"4e07408562be",
-		"4b227777d4dd",
-		"ef2d127de37b",
-	}
-	var userNames = [6]string{"管理员", "①号业主", "②号业主", "③号业主", "④号业主", "⑤号业主"}
-	var balances = [6]float64{0, 5000000, 5000000, 5000000, 5000000, 5000000}
+	// var userNames = [6]string{"admin"}
+	// var balances = [6]float64{0}
 	//初始化账号数据
-	for i, val := range accountIds {
-		account := &model.Account{
-			AccountId: val,
-			UserName:  userNames[i],
-			Balance:   balances[i],
-		}
+	// 在这里可以对前端传来的数据进行处理，例如将密码加密后存入数据库等等
+	// 将用户名和密码合并成一个字符串
+	combined := "admin" + "123456"
+
+	// 使用SHA-256算法进行hash
+	hashed := sha256.Sum256([]byte(combined))
+	// 将hash结果转换为16进制字符串
+    hashStr := fmt.Sprintf("%x", hashed)
+	hashStr = hashStr[:16]
+	account := &model.Account{
+		AccountId: hashStr,
+		UserName:  "admin",
+		Balance:   0,
+	}
+	res := []string{hashStr}
 		// 写入账本
-		if err := utils.WriteLedger(account, stub, model.AccountKey, []string{val}); err != nil {
-			return shim.Error(fmt.Sprintf("%s", err))
-		}
+	if err := utils.WriteLedger(account, stub, model.AccountKey, res); err != nil {
+		return shim.Error(fmt.Sprintf("%s", err))
 	}
 	return shim.Success(nil)
 }
@@ -74,7 +75,7 @@ func (t *BlockChainRealEstate) Invoke(stub shim.ChaincodeStubInterface) pb.Respo
 	case "updateDonating":
 		return api.UpdateDonating(stub, args)
 	case "register":
-		return api.Register(stub,args)
+		return api.Register(stub, args)
 	default:
 		return shim.Error(fmt.Sprintf("没有该功能: %s", funcName))
 	}

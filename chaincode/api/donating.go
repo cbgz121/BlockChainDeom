@@ -44,7 +44,7 @@ func CreateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	if err = json.Unmarshal(resultsAccount[0], &accountGrantee); err != nil {
 		return shim.Error(fmt.Sprintf("查询操作人信息-反序列化出错: %s", err))
 	}
-	if accountGrantee.UserName == "管理员" {
+	if accountGrantee.UserName == "admin" {
 		return shim.Error(fmt.Sprintf("不能捐赠给管理员%s", err))
 	}
 	//判断记录是否已存在，不能重复发起捐赠

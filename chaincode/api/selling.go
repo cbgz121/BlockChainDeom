@@ -122,7 +122,7 @@ func CreateSellingByBuy(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if err = json.Unmarshal(resultsAccount[0], &buyerAccount); err != nil {
 		return shim.Error(fmt.Sprintf("查询buyer买家信息-反序列化出错: %s", err))
 	}
-	if buyerAccount.UserName == "管理员" {
+	if buyerAccount.UserName == "admin" {
 		return shim.Error(fmt.Sprintf("管理员不能购买%s", err))
 	}
 	//判断余额是否充足

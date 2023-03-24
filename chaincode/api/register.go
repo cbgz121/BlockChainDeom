@@ -20,6 +20,7 @@ func Register(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	hashed := sha256.Sum256([]byte(combined))
 	// 将hash结果转换为16进制字符串
     hashStr := fmt.Sprintf("%x", hashed)
+	hashStr = hashStr[:16]
 
 	account := &model.Account{
 		AccountId: hashStr,

@@ -175,7 +175,7 @@ export default {
         if (response !== null) {
           // 过滤掉管理员和当前用户
           this.accountList = response.filter(item =>
-            item.userName !== '管理员' && item.accountId !== this.accountId
+            item.userName !== 'admin' && item.accountId !== this.accountId
           )
         }
       })

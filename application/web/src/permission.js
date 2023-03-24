@@ -27,6 +27,10 @@ router.beforeEach(async(to, from, next) => {
         path: '/'
       })
       NProgress.done()
+    } else if (to.path === '/register') {
+      // if the user wants to access the register page, redirect to the register page
+      next()
+      NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
@@ -62,7 +66,7 @@ router.beforeEach(async(to, from, next) => {
   } else {
     /* has no token*/
 
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (whiteList.indexOf(to.path) !== -1 || to.path === '/register') {
       // in the free login whitelist, go directly
       next()
     } else {

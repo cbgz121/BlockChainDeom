@@ -17,6 +17,7 @@
             <div style="text-align: center;">
                 还没有账号？
                 <a href="javascript:void(0);" @click="goToRegister">立即注册</a>
+                <!-- <router-link href="/register">立即注册</router-link> -->
             </div>
 
         </el-form>
@@ -45,8 +46,9 @@ export default {
         handleLogin() {
             if (this.username && this.password) {
                 this.loading = true
-                login(this.username, this.password).then(() => {
-                    this.$router.push('/')
+                this.$store.dispatch('account/login', {username:this.username, password:this.password}).then(() => {
+                    this.$router.push({ path: this.redirect || '/' })
+                    this.loading = false
                 }).catch(() => {
                     this.$message.error('用户名或密码错误')
                     this.loading = false

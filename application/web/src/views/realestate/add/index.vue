@@ -75,7 +75,7 @@ export default {
       if (response !== null) {
         // 过滤掉管理员
         this.accountList = response.filter(item =>
-          item.userName !== '管理员'
+          item.userName !== 'admin'
         )
       }
     })

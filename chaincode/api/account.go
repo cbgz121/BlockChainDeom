@@ -4,6 +4,7 @@ import (
 	"chaincode/model"
 	"chaincode/pkg/utils"
 	"encoding/json"
+	"crypto/sha256"
 	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -13,7 +14,19 @@ import (
 // QueryAccountList 查询账户列表
 func QueryAccountList(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var accountList []model.Account
-	results, err := utils.GetStateByPartialCompositeKeys(stub, model.AccountKey, args)
+	// 在这里可以对前端传来的数据进行处理，例如将密码加密后存入数据库等等
+	// 将用户名和密码合并成一个字符串
+	combined := args[0] + args[1]
+	res := make([]string,0)
+	if combined != "" {
+		// 使用SHA-256算法进行hash
+		hashed := sha256.Sum256([]byte(combined))
+		// 将hash结果转换为16进制字符串
+		hashStr := fmt.Sprintf("%x", hashed)
+		hashStr = hashStr[:16]
+		res = append(res,hashStr)
+	}
+	results, err := utils.GetStateByPartialCompositeKeys(stub, model.AccountKey, res)
 	if err != nil {
 		return shim.Error(fmt.Sprintf("%s", err))
 	}

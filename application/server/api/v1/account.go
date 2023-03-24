@@ -11,12 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AccountIdBody struct {
-	AccountId string `json:"accountId"`
-}
-
 type AccountRequestBody struct {
-	Args []AccountIdBody `json:"args"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func QueryAccountList(c *gin.Context) {
@@ -28,9 +25,8 @@ func QueryAccountList(c *gin.Context) {
 		return
 	}
 	var bodyBytes [][]byte
-	for _, val := range body.Args {
-		bodyBytes = append(bodyBytes, []byte(val.AccountId))
-	}
+	bodyBytes = append(bodyBytes, []byte(body.Username))
+	bodyBytes = append(bodyBytes, []byte(body.Password))
 	//调用智能合约
 	resp, err := bc.ChannelQuery("queryAccountList", bodyBytes)
 	if err != nil {
@@ -43,5 +39,10 @@ func QueryAccountList(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, "失败", err.Error())
 		return
 	}
+	// for i := range data {
+	// 	if id, ok := data[i]["accountId"].(string); ok && len(id) >= 16 {
+	// 		data[i]["accountId"] = id[:16]
+	// 	}
+	// }
 	appG.Response(http.StatusOK, "成功", data)
 }

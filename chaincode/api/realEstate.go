@@ -49,7 +49,7 @@ func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	if err = json.Unmarshal(resultsAccount[0], &account); err != nil {
 		return shim.Error(fmt.Sprintf("查询操作人信息-反序列化出错: %s", err))
 	}
-	if account.UserName != "管理员" {
+	if account.UserName != "admin" {
 		return shim.Error(fmt.Sprintf("操作人权限不足%s", err))
 	}
 	//判断业主是否存在

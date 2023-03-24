@@ -40,6 +40,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_PASSWORD: (state, passWord) => {
+    state.passWord = passWord
   }
 }
 
@@ -48,12 +51,15 @@ const actions = {
     commit
   }, accountId) {
     return new Promise((resolve, reject) => {
-      login({
-        args: [{
-          accountId: accountId
-        }]
-      }).then(response => {
+      login(
+        // args: [{
+        //   accountId: accountId
+        // }]
+        accountId
+      ).then(response => {
         commit('SET_TOKEN', response[0].accountId)
+        commit('SET_USERNAME',response[0].userName)
+        commit('SET_PASSWORD',accountId.password)
         setToken(response[0].accountId)
         resolve()
       }).catch(error => {
@@ -68,12 +74,11 @@ const actions = {
   }) {
     return new Promise((resolve, reject) => {
       login({
-        args: [{
-          accountId: state.token
-        }]
+        username:state.userName,
+        password:state.passWord
       }).then(response => {
         var roles
-        if (response[0].userName === '管理员') {
+        if (response[0].userName === 'admin') {
           roles = ['admin']
         } else {
           roles = ['editor']

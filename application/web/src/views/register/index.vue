@@ -48,6 +48,14 @@ export default {
             phone: "",
         };
     },
+    watch: {
+        $route: {
+            handler: function (route) {
+                this.redirect = route.query && route.query.redirect
+            },
+            immediate: true
+        }
+    },
     methods: {
         handleRegister() {
             if (
@@ -62,20 +70,25 @@ export default {
                     return;
                 }
                 this.registering = true;
+		// this.$store.dispatch('account/register', this.username,this.password,this.email,this.phone).then(() => {
+		// this.$message.success("注册成功")
+        //   	this.$router.push({ path: this.redirect || '/' })
                 register({
-                    username: this.username,
-                    password: this.password,
-                    email: this.email,
-                    phone: this.phone,
+                   username: this.username,
+                   password: this.password,
+                   email: this.email,
+                   phone: this.phone,
                 }).then(() => {
-                    this.$message.success("注册成功");
-                    this.$router.push("/");
+                   this.$message.success("注册成功")
+                   this.$router.push('/')
+                // window.location.href('/')
+                    // this.registering = false
                 }).catch((error) => {
-                    this.$message.error(error.message);
-                    this.registering = false;
+                    this.$message.error(error.message)
+                    this.registering = false
                 });
             } else {
-                this.$message("请完整填写注册信息");
+                this.$message("请完整填写注册信息")
             }
         },
     },

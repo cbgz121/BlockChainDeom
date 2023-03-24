@@ -40,6 +40,7 @@ func Register(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, "失败", err.Error())
 		return
 	}
+	fmt.Println(data)
 
 	// 假设处理完毕后，将数据存入数据库成功
 	if len(data) != 0 {
