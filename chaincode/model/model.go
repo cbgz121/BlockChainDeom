@@ -5,6 +5,7 @@ type Account struct {
 	AccountId string  `json:"accountId"` //账号ID
 	UserName  string  `json:"userName"`  //账号名
 	Balance   float64 `json:"balance"`   //余额
+	PassWord string   `json:"passWord"`
 }
 
 // RealEstate 房地产作为担保出售、捐赠或质押时Encumbrance为true，默认状态false。

@@ -14,18 +14,23 @@ import (
 // CreateRealEstate 新建房地产(管理员)
 func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// 验证参数
-	if len(args) != 4 {
+	if len(args) != 9 {
 		return shim.Error("参数个数不满足")
 	}
 	accountId := args[0] //accountId用于验证是否为管理员
 	proprietor := args[1]
 	totalArea := args[2]
 	livingSpace := args[3]
-	if accountId == "" || proprietor == "" || totalArea == "" || livingSpace == "" {
+	estateNumber := args[4]
+	estateAdress := args[5]
+	buildYear   := args[6]
+	estateType  := args[7]
+	estateStatus := args[8]
+	if accountId == "" || proprietor == "" || totalArea == "" || livingSpace == "" || estateNumber == "" || estateAdress == "" || buildYear == "" || estateType == "" || estateStatus == "" {
 		return shim.Error("参数存在空值")
 	}
-	if accountId == proprietor {
-		return shim.Error("操作人应为管理员且与所有人不能相同")
+	if accountId != proprietor {
+		return shim.Error("操作人应为本人")
 	}
 	// 参数数据格式转换
 	var formattedTotalArea float64
@@ -41,17 +46,17 @@ func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 		formattedLivingSpace = val
 	}
 	//判断是否管理员操作
-	resultsAccount, err := utils.GetStateByPartialCompositeKeys(stub, model.AccountKey, []string{accountId})
-	if err != nil || len(resultsAccount) != 1 {
-		return shim.Error(fmt.Sprintf("操作人权限验证失败%s", err))
-	}
-	var account model.Account
-	if err = json.Unmarshal(resultsAccount[0], &account); err != nil {
-		return shim.Error(fmt.Sprintf("查询操作人信息-反序列化出错: %s", err))
-	}
-	if account.UserName != "admin" {
-		return shim.Error(fmt.Sprintf("操作人权限不足%s", err))
-	}
+	// resultsAccount, err := utils.GetStateByPartialCompositeKeys(stub, model.AccountKey, []string{accountId})
+	// if err != nil || len(resultsAccount) != 1 {
+	// 	return shim.Error(fmt.Sprintf("操作人权限验证失败%s", err))
+	// }
+	// var account model.Account
+	// if err = json.Unmarshal(resultsAccount[0], &account); err != nil {
+	// 	return shim.Error(fmt.Sprintf("查询操作人信息-反序列化出错: %s", err))
+	// }
+	// if account.UserName != "admin" {
+	// 	return shim.Error(fmt.Sprintf("操作人权限不足%s", err))
+	// }
 	//判断业主是否存在
 	resultsProprietor, err := utils.GetStateByPartialCompositeKeys(stub, model.AccountKey, []string{proprietor})
 	if err != nil || len(resultsProprietor) != 1 {

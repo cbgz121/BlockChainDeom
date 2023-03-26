@@ -35,6 +35,7 @@ func (t *BlockChainRealEstate) Init(stub shim.ChaincodeStubInterface) pb.Respons
 		AccountId: hashStr,
 		UserName:  "admin",
 		Balance:   0,
+		PassWord: "123456",
 	}
 	res := []string{hashStr}
 		// 写入账本

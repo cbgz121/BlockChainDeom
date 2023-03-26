@@ -39,6 +39,7 @@ func QueryAccountList(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, "失败", err.Error())
 		return
 	}
+	fmt.Println(data)
 	// for i := range data {
 	// 	if id, ok := data[i]["accountId"].(string); ok && len(id) >= 16 {
 	// 		data[i]["accountId"] = id[:16]

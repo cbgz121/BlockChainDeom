@@ -26,6 +26,7 @@ func Register(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		AccountId: hashStr,
 		UserName:  args[0],
 		Balance:   5000000,
+		PassWord: args[1],
 	}
 	
 	// 写入账本

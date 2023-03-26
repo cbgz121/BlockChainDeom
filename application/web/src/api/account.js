@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 获取登录界面角色选择列表
+//获取登录界面角色选择列表
 export function queryAccountList() {
   return request({
     url: '/queryAccountList',

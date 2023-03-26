@@ -1,0 +1,159 @@
+<template>
+    <div class="app-container">
+        <el-form ref="ruleForm" v-loading="loading" :model="ruleForm" :rules="rules" label-width="100px">
+            <el-form-item label="业主ID" prop="proprietor">
+                <!-- <el-select v-model="ruleForm.proprietor" placeholder="请选择业主" @change="selectGet">
+                    <el-option v-for="item in accountList" :key="item.accountId" :label="item.userName"
+                        :value="item.accountId">
+                        <span style="float: left">{{ item.userName }}</span>
+                        <span style="float: right; color: #8492a6; font-size: 13px">{{ item.accountId }}</span>
+                    </el-option>
+                </el-select> -->
+                <el-input v-model="ruleForm.proprietor" placeholder="请输入业主ID"></el-input>
+            </el-form-item>
+            <el-form-item label="房产证号" prop="propertyCertificate">
+                <el-input v-model="ruleForm.propertyCertificate" placeholder="请输入房产证号"></el-input>
+            </el-form-item>
+            <el-form-item label="房产地址" prop="propertyAddress">
+                <el-input v-model="ruleForm.propertyAddress" placeholder="请输入房产地址"></el-input>
+            </el-form-item>
+            <el-form-item label="建造年份" prop="constructionYear">
+                <el-date-picker v-model="ruleForm.constructionYear" type="date" placeholder="选择日期"
+                    style="width: 100%;"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="房产类型" prop="propertyType">
+                <el-input v-model="ruleForm.propertyType" placeholder="请输入房产类型"></el-input>
+            </el-form-item>
+            <el-form-item label="房产状态描述" prop="propertyStatus">
+                <el-input v-model="ruleForm.propertyStatus" placeholder="请输入房产状态描述"></el-input>
+            </el-form-item>
+            <el-form-item label="总空间 ㎡" prop="totalArea">
+                <el-input-number v-model="ruleForm.totalArea" :precision="2" :step="0.1" :min="0" />
+            </el-form-item>
+            <el-form-item label="居住空间 ㎡" prop="livingSpace">
+                <el-input-number v-model="ruleForm.livingSpace" :precision="2" :step="0.1" :min="0" />
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+</template>
+<script>
+import { mapGetters } from 'vuex'
+import { queryAccountList } from '@/api/account'
+import { createRealEstate } from '@/api/realEstate'
+
+export default {
+    name: 'AddRealeState',
+    data() {
+        var checkArea = (rule, value, callback) => {
+            if (value <= 0) {
+                callback(new Error('必须大于0'))
+            } else {
+                callback()
+            }
+        }
+        return {
+            ruleForm: {
+                proprietor: '',
+                propertyCertificate: '',
+                propertyAddress: '',
+                constructionYear: '',
+                propertyType: '',
+                propertyStatus: '',
+                totalArea: 0,
+                livingSpace: 0
+            },
+            accountList: [],
+            rules: {
+                proprietor: [
+                    { required: true, message: '请选择业主', trigger: 'change' }
+                ],
+                totalArea: [
+                    { validator: checkArea, trigger: 'blur' }
+                ],
+                livingSpace: [
+                    { validator: checkArea, trigger: 'blur' }
+                ]
+            },
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'accountId'
+        ])
+    },
+            // created() {
+                // queryAccountList().then(response => {
+                //     if (response !== null) {
+                //         // 过滤掉管理员
+                //         this.accountList = response.filter(item =>
+                //             item.userName !== 'admin'
+                //         )
+                //     }
+                // })
+            // },
+            methods: {
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            this.$confirm('是否立即创建?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'success'
+                            }).then(() => {
+                                this.loading = true
+                                createRealEstate({
+                                    accountId: this.accountId,
+                                    proprietor: this.ruleForm.proprietor,
+                                    totalArea: this.ruleForm.totalArea,
+                                    livingSpace: this.ruleForm.livingSpace,
+                                    estateNumber: this.ruleForm.propertyCertificate,
+                                    estateAddress: this.ruleForm.propertyAddress,
+                                    buildYear: this.ruleForm.constructionYear,
+                                    estateType: this.ruleForm.propertyType,
+                                    estateStatus: this.ruleForm.propertyStatus
+                                }).then(response => {
+                                    this.loading = false
+                                    if (response !== null) {
+                                        this.$message({
+                                            type: 'success',
+                                            message: '创建成功!'
+                                        })
+                                    } else {
+                                        this.$message({
+                                            type: 'error',
+                                            message: '创建失败!'
+                                        })
+                                    }
+                                    setTimeout(() => {
+                                        window.location.reload(false);
+                                    }, 1000);
+                                }).catch(_ => {
+                                    this.loading = false
+                                })
+                            }).catch(() => {
+                                this.loading = false
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消创建'
+                                })
+                            })
+                        } else {
+                            return false
+                        }
+                    })
+                },
+                resetForm(formName) {
+                    this.$refs[formName].resetFields()
+                },
+                selectGet(accountId) {
+                    this.ruleForm.proprietor = accountId
+                }
+            }
+        }
+</script>
+
+<style scoped></style>

@@ -81,8 +81,6 @@ export default {
                 }).then(() => {
                    this.$message.success("注册成功")
                    this.$router.push('/')
-                // window.location.href('/')
-                    // this.registering = false
                 }).catch((error) => {
                     this.$message.error(error.message)
                     this.registering = false

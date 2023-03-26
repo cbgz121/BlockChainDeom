@@ -4,7 +4,9 @@ import {
 import {
   getToken,
   setToken,
-  removeToken
+  removeToken,
+  setTokenUsername,
+  setTokenPassword
 } from '@/utils/auth'
 import {
   resetRouter
@@ -49,18 +51,17 @@ const mutations = {
 const actions = {
   login({
     commit
-  }, accountId) {
+  }, accountIdargs) {
     return new Promise((resolve, reject) => {
       login(
-        // args: [{
-        //   accountId: accountId
-        // }]
-        accountId
+        accountIdargs
       ).then(response => {
         commit('SET_TOKEN', response[0].accountId)
         commit('SET_USERNAME',response[0].userName)
-        commit('SET_PASSWORD',accountId.password)
+        commit('SET_PASSWORD',response[0].passWord)
         setToken(response[0].accountId)
+        setTokenUsername(response[0].userName)
+        setTokenPassword(response[0].passWord)
         resolve()
       }).catch(error => {
         reject(error)
@@ -69,13 +70,12 @@ const actions = {
   },
   // get user info
   getInfo({
-    commit,
-    state
-  }) {
+    commit
+  }, tokenpass) {
     return new Promise((resolve, reject) => {
       login({
-        username:state.userName,
-        password:state.passWord
+        username: tokenpass.username,
+        password: tokenpass.password
       }).then(response => {
         var roles
         if (response[0].userName === 'admin') {

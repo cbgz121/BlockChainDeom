@@ -154,12 +154,12 @@ export const asyncRoutes = [
     path: '/addRealestate',
     component: Layout,
     meta: {
-      roles: ['admin']
+      roles: ['editor']
     },
     children: [{
       path: '/addRealestate',
       name: 'AddRealestate',
-      component: () => import('@/views/realestate/add/index'),
+      component: () => import('@/views/realestate/add/index2'),
       meta: {
         title: '新增房产',
         icon: 'addRealestate'

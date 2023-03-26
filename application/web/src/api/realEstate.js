@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 // 新建房地产(管理员)
-export function createRealEstate(data) {
+export function createRealEstate(resdata) {
   return request({
     url: '/createRealEstate',
     method: 'post',
-    data
+    data:resdata
   })
 }
 

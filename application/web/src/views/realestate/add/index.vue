@@ -70,16 +70,16 @@ export default {
       'accountId'
     ])
   },
-  created() {
-    queryAccountList().then(response => {
-      if (response !== null) {
-        // 过滤掉管理员
-        this.accountList = response.filter(item =>
-          item.userName !== 'admin'
-        )
-      }
-    })
-  },
+  // created() {
+  //   queryAccountList().then(response => {
+  //     if (response !== null) {
+  //       // 过滤掉管理员
+  //       this.accountList = response.filter(item =>
+  //         item.userName !== 'admin'
+  //       )
+  //     }
+  //   })
+  // },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

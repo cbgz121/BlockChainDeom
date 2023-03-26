@@ -48,13 +48,13 @@ export default {
       immediate: true
     }
   },
-  created() {
-    queryAccountList().then(response => {
-      if (response !== null) {
-        this.accountList = response
-      }
-    })
-  },
+  // created() {
+  //   queryAccountList().then(response => {
+  //     if (response !== null) {
+  //       this.accountList = response
+  //     }
+  //   })
+  // },
   methods: {
     handleLogin() {
       if (this.value) {

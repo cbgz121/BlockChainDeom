@@ -17,6 +17,11 @@ type RealEstateRequestBody struct {
 	Proprietor  string  `json:"proprietor"`  //所有者(业主)(业主AccountId)
 	TotalArea   float64 `json:"totalArea"`   //总面积
 	LivingSpace float64 `json:"livingSpace"` //生活空间
+	EstateNumber string `json:"estateNumber"`
+	EstateAddress string `json:"estateAddress"`
+	BuildYear     string `json:"buildYear"`
+	EstateType    string  `json:"estateType"`
+	EstateStatus  string  `json:"estateStatus"`
 }
 
 type RealEstateQueryRequestBody struct {
@@ -35,11 +40,26 @@ func CreateRealEstate(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, "失败", "TotalArea总面积和LivingSpace生活空间必须大于0，且生活空间小于等于总面积")
 		return
 	}
+	fmt.Println(body)
 	var bodyBytes [][]byte
 	bodyBytes = append(bodyBytes, []byte(body.AccountId))
 	bodyBytes = append(bodyBytes, []byte(body.Proprietor))
 	bodyBytes = append(bodyBytes, []byte(strconv.FormatFloat(body.TotalArea, 'E', -1, 64)))
 	bodyBytes = append(bodyBytes, []byte(strconv.FormatFloat(body.LivingSpace, 'E', -1, 64)))
+	bodyBytes = append(bodyBytes, []byte(body.EstateNumber))
+	bodyBytes = append(bodyBytes, []byte(body.EstateAddress))
+	bodyBytes = append(bodyBytes, []byte(body.BuildYear))
+	bodyBytes = append(bodyBytes, []byte(body.EstateType))
+	bodyBytes = append(bodyBytes, []byte(body.EstateStatus))
+	if body.AccountId != body.Proprietor {
+		appG.Response(http.StatusBadRequest, "失败", "操作人应为本人")
+		return
+	}
+	if body.AccountId == "" || body.Proprietor == "" || body.TotalArea == 0 || body.LivingSpace == 0 || body.EstateNumber == "" || body.EstateAddress == "" || body.BuildYear == "" || body.EstateType == "" || body.EstateStatus == "" {
+		appG.Response(http.StatusBadRequest, "失败", "参数存在空值")
+		return
+	}
+	
 	//调用智能合约
 	resp, err := bc.ChannelExecute("createRealEstate", bodyBytes)
 	if err != nil {
