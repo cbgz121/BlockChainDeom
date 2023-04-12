@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <el-alert
+    <!-- <el-alert
       type="success"
     >
       <p>账户ID: {{ accountId }}</p>
       <p>用户名: {{ userName }}</p>
       <p>余额: ￥{{ balance }} 元</p>
-    </el-alert>
+    </el-alert> -->
     <div v-if="sellingList.length==0" style="text-align: center;">
       <el-alert
         title="查询不到数据"
@@ -26,10 +26,10 @@
             <el-tag>房产ID: </el-tag>
             <span>{{ val.objectOfSale }}</span>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <el-tag type="success">销售者ID: </el-tag>
             <span>{{ val.seller }}</span>
-          </div>
+          </div> -->
           <div class="item">
             <el-tag type="danger">价格: </el-tag>
             <span>￥{{ val.price }} 元</span>
@@ -42,27 +42,48 @@
             <el-tag type="info">创建时间: </el-tag>
             <span>{{ val.createTime }}</span>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <el-tag>购买者ID: </el-tag>
             <span v-if="val.buyer===''">虚位以待</span>
             <span>{{ val.buyer }}</span>
-          </div>
+          </div> -->
+          <!-- <div v-if="!val.encumbrance && roles[0] !== 'admin'"> -->
+          <div v-if="!val.encumbrance">
+              <el-button type="text" @click="openDonatingDialog(val)">详细信息</el-button>
+            </div>
         </el-card>
       </el-col>
     </el-row>
+
+    <el-dialog v-loading="loadingDialog" :visible.sync="dialogCreateDonating" :close-on-click-modal="false" @close="resetForm('DonatingForm')">
+        <el-form ref="DonatingForm" :model="DonatingForm" :rules="rulesDonating" label-width="100px">
+          <el-form style="width: 100%" v-for="(account, index) in accountList" :key="index">
+          <el-form-item :label="'在售状态: ' + account.encumbrance"></el-form-item>
+          <el-form-item :label="'房产地址: ' + account.estateAddress"></el-form-item>
+          <el-form-item :label="'建造年份: ' + account.buildYear"></el-form-item>
+          <el-form-item :label="'房产类型: ' + account.estateType"></el-form-item>
+          <el-form-item :label="'房产状态描述: ' + account.estateStatus"></el-form-item>
+          <el-form-item :label="'总空间 ㎡: ' + account.totalArea"></el-form-item>
+          <el-form-item :label="'居住空间 ㎡: ' + account.livingSpace"></el-form-item>
+          </el-form>
+        </el-form>
+      </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { querySellingList, createSellingByBuy, updateSelling } from '@/api/selling'
+import { queryRealEstateList } from '@/api/realEstate'
 
 export default {
   name: 'AllSelling',
   data() {
     return {
+      dialogCreateDonating: false,
       loading: true,
-      sellingList: []
+      sellingList: [],
+      accountList: []
     }
   },
   computed: {
@@ -122,6 +143,17 @@ export default {
         })
       })
     },
+    openDonatingDialog(item) {
+      this.dialogCreateDonating = true
+      this.valItem = item
+      queryRealEstateList().then(response => {
+        if (response !== null) {
+          this.accountList = response.filter(item =>
+            item.realEstateId === this.valItem.objectOfSale
+          )
+        }
+      })
+    },
     updateSelling(item, type) {
       let tip = ''
       if (type === 'done') {
@@ -173,15 +205,15 @@ export default {
 </script>
 
 <style>
-  .container{
+  /* .container{
     width: 100%;
     text-align: center;
     min-height: 100%;
     overflow: hidden;
-  }
-  .tag {
+  } */
+  /* .tag {
     float: left;
-  }
+  } */
 
   .item {
     font-size: 14px;
@@ -189,7 +221,7 @@ export default {
     color: #999;
   }
 
-  .clearfix:before,
+  /* .clearfix:before,
   .clearfix:after {
     display: table;
   }
@@ -201,5 +233,119 @@ export default {
     width: 280px;
     height: 380px;
     margin: 18px;
-  }
+  } */
+
+  
+.container {
+  text-align: center;
+  margin: 30px auto;
+  max-width: 1200px;
+}
+
+.el-alert {
+  margin-bottom: 30px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.el-alert p {
+  margin-bottom: 10px;
+}
+
+.el-row {
+  margin-bottom: 30px;
+}
+
+.el-card {
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.el-card .item {
+  margin-top: 20px;
+}
+
+.el-card .item el-tag {
+  margin-right: 10px;
+  font-size: 1px;
+}
+
+.el-card .encumbrance {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.el-card .realEstate-card .el-button {
+  color: #333;
+  font-size: 14px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+}
+
+.el-card .realEstate-card .el-button:hover {
+  background-color: #f5f7fa;
+}
+
+.el-card .realEstate-card .el-divider {
+  margin: 0 10px;
+}
+
+.el-card .realEstate-card .el-rate {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.el-dialog {
+  text-align: center;
+}
+
+.el-dialog__header {
+  font-size: 18px;
+}
+
+.el-dialog__body {
+  padding: 20px;
+}
+
+.el-dialog__footer {
+  padding: 20px;
+}
+
+.el-button--primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.el-button--primary:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.el-select {
+  width: 100%;
+  font-size: 14px;
+}
+
+.el-select__caret {
+  color: #c0c4cc;
+}
+
+.el-option {
+  font-size: 14px;
+}
+
+.el-option__label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.el-option__label span:first-child {
+  margin-right: 10px;
+}
+
+.el-input-number {
+  width: 100%;
+  font-size: 14px;
+}
 </style>

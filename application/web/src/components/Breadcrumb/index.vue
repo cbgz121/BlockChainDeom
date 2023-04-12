@@ -64,15 +64,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-breadcrumb.el-breadcrumb {
-  display: inline-block;
-  font-size: 14px;
-  line-height: 50px;
-  margin-left: 8px;
+// .app-breadcrumb.el-breadcrumb {
+//   display: inline-block;
+//   font-size: 14px;
+//   line-height: 50px;
+//   margin-left: 8px;
 
-  .no-redirect {
-    color: #97a8be;
-    cursor: text;
-  }
+//   .no-redirect {
+//     color: #97a8be;
+//     cursor: text;
+//   }
+// }
+
+/* 样式定义 */
+.app-breadcrumb {
+  font-size: 16px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+}
+
+.no-redirect {
+  font-weight: bold;
+}
+
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.3s;
+}
+
+.breadcrumb-enter,
+.breadcrumb-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* 应用到元素 */
+.el-breadcrumb-item a {
+  color: #555;
+  text-decoration: none;
+}
+
+.el-breadcrumb-item a:hover {
+  color: #222;
+}
+
+.el-breadcrumb-item a:active,
+.el-breadcrumb-item a:focus {
+  outline: none;
+  color: #222;
+}
+
+.el-breadcrumb-item.is-active span {
+  font-weight: bold;
 }
 </style>

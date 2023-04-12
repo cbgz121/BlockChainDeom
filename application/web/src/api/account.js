@@ -17,6 +17,15 @@ export function login(logindata) {
   })
 }
 
+// 删除用户
+export function deleteid(logindata) {
+  return request({
+    url: '/deleteid',
+    method: 'post',
+    data: logindata
+  })
+}
+
 export function register(registerdata) {
   return request({
     url: '/register',

@@ -4,6 +4,7 @@ import (
 	"chaincode/model"
 	"chaincode/pkg/utils"
 	"encoding/json"
+	"crypto/sha256"
 	"fmt"
 	"strconv"
 
@@ -11,7 +12,7 @@ import (
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-// CreateRealEstate 新建房地产(管理员)
+// CreateRealEstate 新建房地产
 func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// 验证参数
 	if len(args) != 9 {
@@ -22,11 +23,11 @@ func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	totalArea := args[2]
 	livingSpace := args[3]
 	estateNumber := args[4]
-	estateAdress := args[5]
+	estateAddress := args[5]
 	buildYear   := args[6]
 	estateType  := args[7]
 	estateStatus := args[8]
-	if accountId == "" || proprietor == "" || totalArea == "" || livingSpace == "" || estateNumber == "" || estateAdress == "" || buildYear == "" || estateType == "" || estateStatus == "" {
+	if accountId == "" || proprietor == "" || totalArea == "" || livingSpace == "" || estateNumber == "" || estateAddress == "" || buildYear == "" || estateType == "" || estateStatus == "" {
 		return shim.Error("参数存在空值")
 	}
 	if accountId != proprietor {
@@ -45,29 +46,29 @@ func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	} else {
 		formattedLivingSpace = val
 	}
-	//判断是否管理员操作
-	// resultsAccount, err := utils.GetStateByPartialCompositeKeys(stub, model.AccountKey, []string{accountId})
-	// if err != nil || len(resultsAccount) != 1 {
-	// 	return shim.Error(fmt.Sprintf("操作人权限验证失败%s", err))
-	// }
-	// var account model.Account
-	// if err = json.Unmarshal(resultsAccount[0], &account); err != nil {
-	// 	return shim.Error(fmt.Sprintf("查询操作人信息-反序列化出错: %s", err))
-	// }
-	// if account.UserName != "admin" {
-	// 	return shim.Error(fmt.Sprintf("操作人权限不足%s", err))
-	// }
 	//判断业主是否存在
 	resultsProprietor, err := utils.GetStateByPartialCompositeKeys(stub, model.AccountKey, []string{proprietor})
 	if err != nil || len(resultsProprietor) != 1 {
 		return shim.Error(fmt.Sprintf("业主proprietor信息验证失败%s", err))
 	}
+	combined := args[1] +args[2] + args[3] + args[4] + args[5] + args[6] + args[7] + args[8]
+
+	// 使用SHA-256算法进行hash
+	hashed := sha256.Sum256([]byte(combined))
+	// 将hash结果转换为16进制字符串
+    hashStr := fmt.Sprintf("%x", hashed)
+	hashStr = hashStr[:16]
 	realEstate := &model.RealEstate{
-		RealEstateID: stub.GetTxID()[:16],
+		RealEstateID: hashStr,
 		Proprietor:   proprietor,
 		Encumbrance:  false,
 		TotalArea:    formattedTotalArea,
 		LivingSpace:  formattedLivingSpace,
+		EstateNumber: estateNumber,
+		EstateAddress: estateAddress,
+		BuildYear: buildYear,
+		EstateType: estateType,
+		EstateStatus: estateStatus,
 	}
 	// 写入账本
 	if err := utils.WriteLedger(realEstate, stub, model.RealEstateKey, []string{realEstate.Proprietor, realEstate.RealEstateID}); err != nil {

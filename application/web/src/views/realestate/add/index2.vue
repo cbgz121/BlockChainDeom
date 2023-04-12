@@ -2,13 +2,6 @@
     <div class="app-container">
         <el-form ref="ruleForm" v-loading="loading" :model="ruleForm" :rules="rules" label-width="100px">
             <el-form-item label="业主ID" prop="proprietor">
-                <!-- <el-select v-model="ruleForm.proprietor" placeholder="请选择业主" @change="selectGet">
-                    <el-option v-for="item in accountList" :key="item.accountId" :label="item.userName"
-                        :value="item.accountId">
-                        <span style="float: left">{{ item.userName }}</span>
-                        <span style="float: right; color: #8492a6; font-size: 13px">{{ item.accountId }}</span>
-                    </el-option>
-                </el-select> -->
                 <el-input v-model="ruleForm.proprietor" placeholder="请输入业主ID"></el-input>
             </el-form-item>
             <el-form-item label="房产证号" prop="propertyCertificate">
@@ -85,16 +78,6 @@ export default {
             'accountId'
         ])
     },
-            // created() {
-                // queryAccountList().then(response => {
-                //     if (response !== null) {
-                //         // 过滤掉管理员
-                //         this.accountList = response.filter(item =>
-                //             item.userName !== 'admin'
-                //         )
-                //     }
-                // })
-            // },
             methods: {
                 submitForm(formName) {
                     this.$refs[formName].validate((valid) => {

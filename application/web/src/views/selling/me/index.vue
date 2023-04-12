@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <el-alert
+    <!-- <el-alert
       type="success"
     >
       <p>账户ID: {{ accountId }}</p>
       <p>用户名: {{ userName }}</p>
       <p>余额: ￥{{ balance }} 元</p>
-    </el-alert>
+    </el-alert> -->
     <div v-if="sellingList.length==0" style="text-align: center;">
       <el-alert
         title="查询不到数据"
@@ -25,10 +25,10 @@
             <el-tag>房产ID: </el-tag>
             <span>{{ val.objectOfSale }}</span>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <el-tag type="success">销售者ID: </el-tag>
             <span>{{ val.seller }}</span>
-          </div>
+          </div> -->
           <div class="item">
             <el-tag type="danger">价格: </el-tag>
             <span>￥{{ val.price }} 元</span>
@@ -41,11 +41,11 @@
             <el-tag type="info">创建时间: </el-tag>
             <span>{{ val.createTime }}</span>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <el-tag>购买者ID: </el-tag>
             <span v-if="val.buyer===''">虚位以待</span>
             <span>{{ val.buyer }}</span>
-          </div>
+          </div> -->
         </el-card>
       </el-col>
     </el-row>
@@ -133,7 +133,7 @@ export default {
 </script>
 
 <style>
-  .container{
+  /* .container{
     width: 100%;
     text-align: center;
     min-height: 100%;
@@ -141,7 +141,7 @@ export default {
   }
   .tag {
     float: left;
-  }
+  }*/
 
   .item {
     font-size: 14px;
@@ -149,7 +149,7 @@ export default {
     color: #999;
   }
 
-  .clearfix:before,
+  /*.clearfix:before,
   .clearfix:after {
     display: table;
   }
@@ -161,5 +161,118 @@ export default {
     width: 280px;
     height: 380px;
     margin: 18px;
-  }
+  } */
+  
+.container {
+  text-align: center;
+  margin: 30px auto;
+  max-width: 1200px;
+}
+
+.el-alert {
+  margin-bottom: 30px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.el-alert p {
+  margin-bottom: 10px;
+}
+
+.el-row {
+  margin-bottom: 30px;
+}
+
+.el-card {
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.el-card .item {
+  margin-top: 20px;
+}
+
+.el-card .item el-tag {
+  margin-right: 10px;
+  font-size: 1px;
+}
+
+.el-card .encumbrance {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.el-card .realEstate-card .el-button {
+  color: #333;
+  font-size: 14px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+}
+
+.el-card .realEstate-card .el-button:hover {
+  background-color: #f5f7fa;
+}
+
+.el-card .realEstate-card .el-divider {
+  margin: 0 10px;
+}
+
+.el-card .realEstate-card .el-rate {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.el-dialog {
+  text-align: center;
+}
+
+.el-dialog__header {
+  font-size: 18px;
+}
+
+.el-dialog__body {
+  padding: 20px;
+}
+
+.el-dialog__footer {
+  padding: 20px;
+}
+
+.el-button--primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.el-button--primary:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.el-select {
+  width: 100%;
+  font-size: 14px;
+}
+
+.el-select__caret {
+  color: #c0c4cc;
+}
+
+.el-option {
+  font-size: 14px;
+}
+
+.el-option__label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.el-option__label span:first-child {
+  margin-right: 10px;
+}
+
+.el-input-number {
+  width: 100%;
+  font-size: 14px;
+}
 </style>

@@ -28,6 +28,8 @@ func Register(c *gin.Context) {
 	var bodyBytes [][]byte
 	bodyBytes = append(bodyBytes, []byte(reqBody.Username))
 	bodyBytes = append(bodyBytes, []byte(reqBody.Password))
+	bodyBytes = append(bodyBytes, []byte(reqBody.Email))
+	bodyBytes = append(bodyBytes, []byte(reqBody.Phone))
 
 	//调用智能合约
 	resp, err := bc.ChannelExecute("register", bodyBytes)

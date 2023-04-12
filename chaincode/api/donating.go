@@ -24,7 +24,7 @@ func CreateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 		return shim.Error("参数存在空值")
 	}
 	if donor == grantee {
-		return shim.Error("捐赠人和受赠人不能同一人")
+		return shim.Error("出租人和租赁人不能同一人")
 	}
 	//判断objectOfDonating是否属于donor
 	resultsRealEstate, err := utils.GetStateByPartialCompositeKeys2(stub, model.RealEstateKey, []string{donor, objectOfDonating})
@@ -45,12 +45,12 @@ func CreateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 		return shim.Error(fmt.Sprintf("查询操作人信息-反序列化出错: %s", err))
 	}
 	if accountGrantee.UserName == "admin" {
-		return shim.Error(fmt.Sprintf("不能捐赠给管理员%s", err))
+		return shim.Error(fmt.Sprintf("不能出租给管理员%s", err))
 	}
 	//判断记录是否已存在，不能重复发起捐赠
 	//若Encumbrance为true即说明此房产已经正在担保状态
 	if realEstate.Encumbrance {
-		return shim.Error("此房地产已经作为担保状态，不能再发起捐赠")
+		return shim.Error("此房地产已经作为担保状态，不能再发起出租")
 	}
 	createTime, _ := stub.GetTxTimestamp()
 	donating := &model.Donating{
@@ -76,7 +76,7 @@ func CreateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 		Donating:   *donating,
 	}
 	if err := utils.WriteLedger(donatingGrantee, stub, model.DonatingGranteeKey, []string{donatingGrantee.Grantee, donatingGrantee.CreateTime}); err != nil {
-		return shim.Error(fmt.Sprintf("将本次捐赠交易写入账本失败%s", err))
+		return shim.Error(fmt.Sprintf("将本次出租交易写入账本失败%s", err))
 	}
 	donatingGranteeByte, err := json.Marshal(donatingGrantee)
 	if err != nil {
@@ -86,7 +86,7 @@ func CreateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	return shim.Success(donatingGranteeByte)
 }
 
-// QueryDonatingList 查询捐赠列表(可查询所有，也可根据发起捐赠人查询)(发起的)(供捐赠人查询)
+// QueryDonatingList 查询出租列表(可查询所有，也可根据发起出租人查询)(发起的)(供捐赠人查询)
 func QueryDonatingList(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var donatingList []model.Donating
 	results, err := utils.GetStateByPartialCompositeKeys2(stub, model.DonatingKey, args)
@@ -110,7 +110,7 @@ func QueryDonatingList(stub shim.ChaincodeStubInterface, args []string) pb.Respo
 	return shim.Success(donatingListByte)
 }
 
-// QueryDonatingListByGrantee 根据受赠人(受赠人AccountId)查询捐赠(受赠的)(供受赠人查询)
+// QueryDonatingListByGrantee 根据受赠人(受赠人AccountId)查询出租(受赠的)(供受赠人查询)
 func QueryDonatingListByGrantee(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 1 {
 		return shim.Error(fmt.Sprintf("必须指定受赠人AccountId查询"))
@@ -137,7 +137,7 @@ func QueryDonatingListByGrantee(stub shim.ChaincodeStubInterface, args []string)
 	return shim.Success(donatingGranteeListByte)
 }
 
-// UpdateDonating 更新捐赠状态（确认受赠、取消）
+// UpdateDonating 更新出租状态（确认租赁、取消）
 func UpdateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// 验证参数
 	if len(args) != 4 {
@@ -151,7 +151,7 @@ func UpdateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 		return shim.Error("参数存在空值")
 	}
 	if donor == grantee {
-		return shim.Error("捐赠人和受赠人不能同一人")
+		return shim.Error("出租人和租赁人不能同一人")
 	}
 	//根据objectOfDonating和donor获取想要购买的房产信息，确认存在该房产
 	resultsRealEstate, err := utils.GetStateByPartialCompositeKeys2(stub, model.RealEstateKey, []string{donor, objectOfDonating})
@@ -171,7 +171,7 @@ func UpdateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	if err = json.Unmarshal(resultsGranteeAccount[0], &accountGrantee); err != nil {
 		return shim.Error(fmt.Sprintf("查询grantee受赠人信息-反序列化出错: %s", err))
 	}
-	//根据objectOfDonating和donor和grantee获取捐赠信息
+	//根据objectOfDonating和donor和grantee获取出租信息
 	resultsDonating, err := utils.GetStateByPartialCompositeKeys2(stub, model.DonatingKey, []string{donor, objectOfDonating, grantee})
 	if err != nil || len(resultsDonating) != 1 {
 		return shim.Error(fmt.Sprintf("根据%s和%s和%s获取销售信息失败: %s", objectOfDonating, donor, grantee, err))
@@ -180,9 +180,9 @@ func UpdateDonating(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	if err = json.Unmarshal(resultsDonating[0], &donating); err != nil {
 		return shim.Error(fmt.Sprintf("UpdateDonating-反序列化出错: %s", err))
 	}
-	//不管完成还是取消操作,必须确保捐赠处于捐赠中状态
+	//不管完成还是取消操作,必须确保出租处于出租中状态
 	if donating.DonatingStatus != model.DonatingStatusConstant()["donatingStart"] {
-		return shim.Error("此交易并不处于捐赠中，确认/取消捐赠失败")
+		return shim.Error("此交易并不处于出租中，确认/取消出租失败")
 	}
 	//根据grantee获取买家购买信息donatingGrantee
 	var donatingGrantee model.DonatingGrantee

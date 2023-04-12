@@ -6,6 +6,8 @@ type Account struct {
 	UserName  string  `json:"userName"`  //账号名
 	Balance   float64 `json:"balance"`   //余额
 	PassWord string   `json:"passWord"`
+	Email    string   `json:"email"`
+	Phone    string   `json:"phone"`
 }
 
 // RealEstate 房地产作为担保出售、捐赠或质押时Encumbrance为true，默认状态false。
@@ -17,6 +19,11 @@ type RealEstate struct {
 	Encumbrance  bool    `json:"encumbrance"`  //是否作为担保
 	TotalArea    float64 `json:"totalArea"`    //总面积
 	LivingSpace  float64 `json:"livingSpace"`  //生活空间
+	EstateNumber string `json:"estateNumber"`
+	EstateAddress string `json:"estateAddress"`
+	BuildYear     string `json:"buildYear"`
+	EstateType    string  `json:"estateType"`
+	EstateStatus  string  `json:"estateStatus"`
 }
 
 // Selling 销售要约
@@ -67,7 +74,7 @@ type Donating struct {
 // DonatingStatusConstant 捐赠状态
 var DonatingStatusConstant = func() map[string]string {
 	return map[string]string{
-		"donatingStart": "捐赠中", //捐赠人发起捐赠合约，等待受赠人确认受赠
+		"donatingStart": "出租中", //捐赠人发起捐赠合约，等待受赠人确认受赠
 		"cancelled":     "已取消", //捐赠人在受赠人确认受赠之前取消捐赠或受赠人取消接收受赠
 		"done":          "完成",  //受赠人确认接收，交易完成
 	}

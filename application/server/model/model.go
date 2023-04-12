@@ -39,7 +39,7 @@ type Donating struct {
 // DonatingStatusConstant 捐赠状态
 var DonatingStatusConstant = func() map[string]string {
 	return map[string]string{
-		"donatingStart": "捐赠中", //捐赠人发起捐赠合约，等待受赠人确认受赠
+		"donatingStart": "出租中", //捐赠人发起捐赠合约，等待受赠人确认受赠
 		"cancelled":     "已取消", //捐赠人在受赠人确认受赠之前取消捐赠或受赠人取消接收受赠
 		"done":          "完成",  //受赠人确认接收，交易完成
 	}

@@ -3,6 +3,7 @@ package v1
 import (
 	bc "application/blockchain"
 	"application/pkg/app"
+	"crypto/sha256"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -15,6 +16,8 @@ type AccountRequestBody struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+var accountIds = map[string]bool{}
 
 func QueryAccountList(c *gin.Context) {
 	appG := app.Gin{C: c}
@@ -40,10 +43,31 @@ func QueryAccountList(c *gin.Context) {
 		return
 	}
 	fmt.Println(data)
-	// for i := range data {
-	// 	if id, ok := data[i]["accountId"].(string); ok && len(id) >= 16 {
-	// 		data[i]["accountId"] = id[:16]
-	// 	}
-	// }
+	if accountId, ok := data[0]["accountId"].(string); ok{
+		if accountIds[accountId] && len(data) == 1 {
+				appG.Response(http.StatusInternalServerError, "失败", "请注册")
+				return
+		}
+	}
 	appG.Response(http.StatusOK, "成功", data)
+}
+
+func DeleteID(c *gin.Context) {
+	appG := app.Gin{C: c}
+	body := new(AccountRequestBody)
+	//解析Body参数
+	if err := c.ShouldBind(body); err != nil {
+		appG.Response(http.StatusBadRequest, "失败", fmt.Sprintf("参数出错%s", err.Error()))
+		return
+	}
+
+	combined := body.Username + body.Password
+
+	// 使用SHA-256算法进行hash
+	hashed := sha256.Sum256([]byte(combined))
+	// 将hash结果转换为16进制字符串
+    hashStr := fmt.Sprintf("%x", hashed)
+	hashStr = hashStr[:16]
+	accountIds[hashStr] = true
+	appG.Response(http.StatusOK, "成功", accountIds)
 }

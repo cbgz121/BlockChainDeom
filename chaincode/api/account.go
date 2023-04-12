@@ -14,7 +14,6 @@ import (
 // QueryAccountList 查询账户列表
 func QueryAccountList(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var accountList []model.Account
-	// 在这里可以对前端传来的数据进行处理，例如将密码加密后存入数据库等等
 	// 将用户名和密码合并成一个字符串
 	combined := args[0] + args[1]
 	res := make([]string,0)

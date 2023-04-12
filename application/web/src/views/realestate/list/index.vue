@@ -1,14 +1,14 @@
 <template>
   <div class="container">
-    <el-alert
+    <!-- <el-alert
       type="success"
     >
       <p>账户ID: {{ accountId }}</p>
       <p>用户名: {{ userName }}</p>
       <p>余额: ￥{{ balance }} 元</p>
-      <p>当发起出售、捐赠或质押操作后，担保状态为true</p>
-      <p>当担保状态为false时，才可发起出售、捐赠或质押操作</p>
-    </el-alert>
+      <p>当发起出售、出租后担保状态为true</p>
+      <p>当担保状态为false时，才可发起出售操作</p>
+    </el-alert> -->
     <div v-if="realEstateList.length==0" style="text-align: center;">
       <el-alert
         title="查询不到数据"
@@ -27,10 +27,10 @@
             <el-tag>房产ID: </el-tag>
             <span>{{ val.realEstateId }}</span>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <el-tag type="success">业主ID: </el-tag>
             <span>{{ val.proprietor }}</span>
-          </div>
+          </div> -->
           <div class="item">
             <el-tag type="warning">总空间: </el-tag>
             <span>{{ val.totalArea }} ㎡</span>
@@ -43,7 +43,7 @@
           <div v-if="!val.encumbrance&&roles[0] !== 'admin'">
             <el-button type="text" @click="openDialog(val)">出售</el-button>
             <el-divider direction="vertical" />
-            <el-button type="text" @click="openDonatingDialog(val)">捐赠</el-button>
+            <el-button type="text" @click="openDonatingDialog(val)">详细信息</el-button>
           </div>
           <el-rate v-if="roles[0] === 'admin'" />
         </el-card>
@@ -65,24 +65,21 @@
     </el-dialog>
     <el-dialog v-loading="loadingDialog" :visible.sync="dialogCreateDonating" :close-on-click-modal="false" @close="resetForm('DonatingForm')">
       <el-form ref="DonatingForm" :model="DonatingForm" :rules="rulesDonating" label-width="100px">
-        <el-form-item label="业主" prop="proprietor">
-          <el-select v-model="DonatingForm.proprietor" placeholder="请选择业主" @change="selectGet">
-            <el-option
-              v-for="item in accountList"
-              :key="item.accountId"
-              :label="item.userName"
-              :value="item.accountId"
-            >
-              <span style="float: left">{{ item.userName }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.accountId }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <el-form style="width: 100%" v-for="(account, index) in accountList" :key="index">
+        <el-form-item :label="'在售状态: ' + account.encumbrance"></el-form-item>
+        <el-form-item :label="'房产地址: ' + account.estateAddress"></el-form-item>
+        <el-form-item :label="'建造年份: ' + account.buildYear"></el-form-item>
+        <el-form-item :label="'房产类型: ' + account.estateType"></el-form-item>
+        <el-form-item :label="'房产状态描述: ' + account.estateStatus"></el-form-item>
+        <el-form-item :label="'总空间 ㎡: ' + account.totalArea"></el-form-item>
+        <el-form-item :label="'居住空间 ㎡: ' + account.livingSpace"></el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="createDonating('DonatingForm')">立即捐赠</el-button>
+        
+      </el-form>
+      <!-- <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="createDonating('DonatingForm')">立即出租</el-button>
         <el-button @click="dialogCreateDonating = false">取 消</el-button>
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>
@@ -171,11 +168,10 @@ export default {
     openDonatingDialog(item) {
       this.dialogCreateDonating = true
       this.valItem = item
-      queryAccountList().then(response => {
+      queryRealEstateList({ proprietor: this.accountId }).then(response => {
         if (response !== null) {
-          // 过滤掉管理员和当前用户
           this.accountList = response.filter(item =>
-            item.userName !== 'admin' && item.accountId !== this.accountId
+            item.realEstateId === this.valItem.realEstateId,
           )
         }
       })
@@ -231,7 +227,7 @@ export default {
     createDonating(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$confirm('是否立即捐赠?', '提示', {
+          this.$confirm('是否立即出租?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'success'
@@ -247,12 +243,12 @@ export default {
               if (response !== null) {
                 this.$message({
                   type: 'success',
-                  message: '捐赠成功!'
+                  message: '出租成功!'
                 })
               } else {
                 this.$message({
                   type: 'error',
-                  message: '捐赠失败!'
+                  message: '出租失败!'
                 })
               }
               setTimeout(() => {
@@ -267,7 +263,7 @@ export default {
             this.dialogCreateDonating = false
             this.$message({
               type: 'info',
-              message: '已取消捐赠'
+              message: '已取消出租'
             })
           })
         } else {
@@ -287,7 +283,7 @@ export default {
 </script>
 
 <style>
-  .container{
+  /* .container{
     width: 100%;
     text-align: center;
     min-height: 100%;
@@ -295,7 +291,7 @@ export default {
   }
   .tag {
     float: left;
-  }
+  }*/
 
   .item {
     font-size: 14px;
@@ -303,7 +299,7 @@ export default {
     color: #999;
   }
 
-  .clearfix:before,
+  /*.clearfix:before,
   .clearfix:after {
     display: table;
   }
@@ -315,5 +311,118 @@ export default {
     width: 280px;
     height: 340px;
     margin: 18px;
-  }
+  } */
+
+.container {
+  text-align: center;
+  margin: 30px auto;
+  max-width: 1200px;
+}
+
+.el-alert {
+  margin-bottom: 30px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.el-alert p {
+  margin-bottom: 10px;
+}
+
+.el-row {
+  margin-bottom: 30px;
+}
+
+.el-card {
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.el-card .item {
+  margin-top: 20px;
+}
+
+.el-card .item el-tag {
+  margin-right: 10px;
+  font-size: 1px;
+}
+
+.el-card .encumbrance {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.el-card .realEstate-card .el-button {
+  color: #333;
+  font-size: 14px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+}
+
+.el-card .realEstate-card .el-button:hover {
+  background-color: #f5f7fa;
+}
+
+.el-card .realEstate-card .el-divider {
+  margin: 0 10px;
+}
+
+.el-card .realEstate-card .el-rate {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.el-dialog {
+  text-align: center;
+}
+
+.el-dialog__header {
+  font-size: 18px;
+}
+
+.el-dialog__body {
+  padding: 20px;
+}
+
+.el-dialog__footer {
+  padding: 20px;
+}
+
+.el-button--primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.el-button--primary:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.el-select {
+  width: 100%;
+  font-size: 14px;
+}
+
+.el-select__caret {
+  color: #c0c4cc;
+}
+
+.el-option {
+  font-size: 14px;
+}
+
+.el-option__label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.el-option__label span:first-child {
+  margin-right: 10px;
+}
+
+.el-input-number {
+  width: 100%;
+  font-size: 14px;
+}
 </style>

@@ -18,15 +18,21 @@ func Register(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	// 使用SHA-256算法进行hash
 	hashed := sha256.Sum256([]byte(combined))
+	hashPassword := sha256.Sum256([]byte(args[1]))
 	// 将hash结果转换为16进制字符串
     hashStr := fmt.Sprintf("%x", hashed)
+    hashPasswordStr := fmt.Sprintf("%x", hashPassword)
 	hashStr = hashStr[:16]
+	hashPasswordStr = hashPasswordStr[:16]
 
 	account := &model.Account{
 		AccountId: hashStr,
 		UserName:  args[0],
 		Balance:   5000000,
-		PassWord: args[1],
+		PassWord:  args[1],
+		// PassWord: hashPasswordStr,
+		Email: args[2],
+		Phone: args[3],
 	}
 	
 	// 写入账本

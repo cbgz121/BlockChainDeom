@@ -98,5 +98,6 @@ func QueryRealEstateList(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, "失败", err.Error())
 		return
 	}
+	fmt.Println(data)
 	appG.Response(http.StatusOK, "成功", data)
 }

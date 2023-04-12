@@ -293,7 +293,6 @@ func UpdateSelling(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		//将房产信息转入买家，并重置担保状态
 		realEstate.Proprietor = buyer
 		realEstate.Encumbrance = false
-		//realEstate.RealEstateID = stub.GetTxID() //重新更新房产ID
 		if err := utils.WriteLedger(realEstate, stub, model.RealEstateKey, []string{realEstate.Proprietor, realEstate.RealEstateID}); err != nil {
 			return shim.Error(fmt.Sprintf("%s", err))
 		}

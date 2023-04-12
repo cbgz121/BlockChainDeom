@@ -65,44 +65,69 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$bg: #2d3a4b;
+$bg: #4a6476;
 $dark_gray: #889aa4;
 $light_gray: #eee;
 
 .login-container {
-    min-height: 100%;
-    width: 100%;
-    background-color: $bg;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #e4e0e0;
+}
 
-    .login-form {
-        position: relative;
-        width: 520px;
-        max-width: 100%;
-        padding: 160px 35px 0;
-        margin: 0 auto;
-        overflow: hidden;
-    }
+.login-form {
+  width: 400px;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
 
-    .svg-container {
-        padding: 6px 5px 6px 15px;
-        color: $dark_gray;
-        vertical-align: middle;
-        width: 30px;
-        display: inline-block;
-    }
+.title-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
 
-    .title-container {
-        position: relative;
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333;
+  text-align: center;
+}
 
-        .title {
-            font-size: 26px;
-            color: $light_gray;
-            margin: 0px auto 40px auto;
-            text-align: center;
-            font-weight: bold;
-        }
-    }
+.el-form-item__label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+}
 
+.el-input__inner {
+  border-radius: 5px;
+  border: 1px solid #dcdfe6;
+  font-size: 16px;
+}
+
+.el-button--primary {
+  background-color: #409eff;
+  border-color: #409eff;
+  font-size: 16px;
+}
+
+.el-button--primary:hover {
+  background-color: #66b1ff;
+  border-color: #66b1ff;
+}
+
+a {
+  color: #409eff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 </style> 

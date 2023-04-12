@@ -13,7 +13,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      MessageBox.alert('服务器开小差了1111'+res.code, 'error', {
+      MessageBox.alert('服务器开小差了'+res.code, 'error', {
         confirmButtonText: '确定',
         type: 'warning'
       })
@@ -31,11 +31,11 @@ service.interceptors.response.use(
       })
       return Promise.reject(error)
     } else {
-      Message({
-        message: '失败 ' + error.response.data.data,
-        type: 'error',
-        duration: 5 * 1000
-      })
+      // Message({
+      //   message: '失败 ' + error.response.data.data,
+      //   type: 'error',
+      //   duration: 5 * 1000
+      // })
       return Promise.reject(error.response)
     }
   }

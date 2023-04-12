@@ -62,7 +62,8 @@ export const constantRoutes = [{
       icon: 'realestate'
     }
   }]
-}
+},
+  
 ]
 
 /**
@@ -98,58 +99,59 @@ export const asyncRoutes = [
         title: '我发起的',
         icon: 'sellingMe'
       }
-    }, {
-      path: 'buy',
-      name: 'SellingBuy',
-      component: () => import('@/views/selling/buy/index'),
-      meta: {
-        roles: ['editor'],
-        title: '我购买的',
-        icon: 'sellingBuy'
-      }
-    }
+    }, 
+    // {
+    //   path: 'buy',
+    //   name: 'SellingBuy',
+    //   component: () => import('@/views/selling/buy/index'),
+    //   meta: {
+    //     roles: ['editor'],
+    //     title: '我购买的',
+    //     icon: 'sellingBuy'
+    //   }
+    // }
     ]
   },
-  {
-    path: '/donating',
-    component: Layout,
-    redirect: '/donating/all',
-    name: 'Donating',
-    alwaysShow: true,
-    meta: {
-      title: '捐赠',
-      icon: 'donating'
-    },
-    children: [{
-      path: 'all',
-      name: 'DonatingAll',
-      component: () => import('@/views/donating/all/index'),
-      meta: {
-        title: '所有捐赠',
-        icon: 'donatingAll'
-      }
-    },
-    {
-      path: 'donor',
-      name: 'DonatingDonor',
-      component: () => import('@/views/donating/donor/index'),
-      meta: {
-        roles: ['editor'],
-        title: '我发起的捐赠',
-        icon: 'donatingDonor'
-      }
-    }, {
-      path: 'grantee',
-      name: 'DonatingGrantee',
-      component: () => import('@/views/donating/grantee/index'),
-      meta: {
-        roles: ['editor'],
-        title: '我收到的受赠',
-        icon: 'donatingGrantee'
-      }
-    }
-    ]
-  },
+  // {
+  //   path: '/donating',
+  //   component: Layout,
+  //   redirect: '/donating/all',
+  //   name: 'Donating',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '出租',
+  //     icon: 'donating'
+  //   },
+  //   children: [{
+  //     path: 'all',
+  //     name: 'DonatingAll',
+  //     component: () => import('@/views/donating/all/index'),
+  //     meta: {
+  //       title: '所有出租',
+  //       icon: 'donatingAll'
+  //     }
+  //   },
+  //   {
+  //     path: 'donor',
+  //     name: 'DonatingDonor',
+  //     component: () => import('@/views/donating/donor/index'),
+  //     meta: {
+  //       roles: ['editor'],
+  //       title: '我发起的出租',
+  //       icon: 'donatingDonor'
+  //     }
+  //   }, {
+  //     path: 'grantee',
+  //     name: 'DonatingGrantee',
+  //     component: () => import('@/views/donating/grantee/index'),
+  //     meta: {
+  //       roles: ['editor'],
+  //       title: '我租赁的',
+  //       icon: 'donatingGrantee'
+  //     }
+  //   }
+  //   ]
+  // },
   {
     path: '/addRealestate',
     component: Layout,
@@ -159,12 +161,56 @@ export const asyncRoutes = [
     children: [{
       path: '/addRealestate',
       name: 'AddRealestate',
-      component: () => import('@/views/realestate/add/index2'),
+      component: () => import('@/views/realestate/add/index3'),
       meta: {
         title: '新增房产',
         icon: 'addRealestate'
       }
     }]
+  },
+  {
+    path: '/search',
+    component: Layout,
+    children: [{
+      path: '/search/all',
+      name: 'search',
+      component: () => import('@/views/search/all/index'),
+      meta: {
+        title: '搜索',
+        icon: 'selling'
+      },
+    }   
+    ]
+  },
+  {
+    path: '/renzheng',
+    component: Layout,
+    children: [{
+      path: '/renzheng',
+      name: 'renzheng',
+      component: () => import('@/views/renzheng/index'),
+      meta: {
+        roles: ['editor'],
+        title: '身份认证',
+        icon: 'selling'
+      },
+    }
+    ]
+  },
+  {
+    path: '/users',
+    component: Layout,
+    children: [{
+      path: '/users',
+      name: 'users',
+      component: () => import('@/views/users/index'),
+      meta: {
+        roles: ['admin'],
+        title: '用户管理',
+        icon: 'selling'
+      },
+    }
+    ]
   },
 
   // 404 page must be placed at the end !!!
