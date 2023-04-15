@@ -1,5 +1,7 @@
 import {
-  login
+  login,
+  authentication,
+  queryAccountList
 } from '@/api/account'
 import {
   getToken,
@@ -57,12 +59,36 @@ const actions = {
         accountIdargs
       ).then(response => {
         commit('SET_TOKEN', response[0].accountId)
+//        commit('SET_ROLES', ['editor'])
         commit('SET_USERNAME',response[0].userName)
+        // commit('SET_ACCOUNTID', response[0].accountId)
         commit('SET_PASSWORD',response[0].passWord)
-        setToken(response[0].accountId)
+        setToken(response[0].userName)
         setTokenUsername(response[0].userName)
         setTokenPassword(response[0].passWord)
         resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  authentication({
+    commit
+  }, accountIdargs) {
+    return new Promise((resolve, reject) => {
+      authentication(
+        accountIdargs
+      ).then(response => {
+        commit('SET_TOKEN', response.accountId)
+        commit('SET_USERNAME',response.userName)
+        commit('SET_ACCOUNTID', response.accountId)
+        commit('SET_PASSWORD',response.passWord)
+        commit('SET_BALANCE', response.balance)
+        setToken(response.accountId)
+        setTokenUsername(response.userName)
+        setTokenPassword(response.passWord)
+       // alert(state.accountId)
+        resolve(response.accountId)
       }).catch(error => {
         reject(error)
       })
@@ -73,10 +99,12 @@ const actions = {
     commit
   }, tokenpass) {
     return new Promise((resolve, reject) => {
+     // alert(tokenpass.username)
       login({
         username: tokenpass.username,
         password: tokenpass.password
       }).then(response => {
+       // alert(tokenpass.username)
         var roles
         if (response[0].userName === 'admin') {
           roles = ['admin']
@@ -86,7 +114,8 @@ const actions = {
         commit('SET_ROLES', roles)
         commit('SET_ACCOUNTID', response[0].accountId)
         commit('SET_USERNAME', response[0].userName)
-        commit('SET_BALANCE', response[0].balance)
+//        commit('SET_BALANCE', response[0].balance)
+//        alert(response[0].userName)
         resolve(roles)
       }).catch(error => {
         reject(error)

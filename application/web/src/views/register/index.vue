@@ -70,12 +70,7 @@ export default {
                     return;
                 }
                 this.registering = true;
-                register({
-                   username: this.username,
-                   password: this.password,
-                   email: this.email,
-                   phone: this.phone,
-                }).then(() => {
+                register({username:this.username, password:this.password, email: this.email,phone:this.phone}).then(() => {
                    this.$message.success("注册成功")
                    this.$router.push('/')
                 }).catch((error) => {

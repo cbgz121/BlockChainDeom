@@ -40,7 +40,6 @@ func CreateRealEstate(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, "失败", "TotalArea总面积和LivingSpace生活空间必须大于0，且生活空间小于等于总面积")
 		return
 	}
-	fmt.Println(body)
 	var bodyBytes [][]byte
 	bodyBytes = append(bodyBytes, []byte(body.AccountId))
 	bodyBytes = append(bodyBytes, []byte(body.Proprietor))
@@ -51,6 +50,7 @@ func CreateRealEstate(c *gin.Context) {
 	bodyBytes = append(bodyBytes, []byte(body.BuildYear))
 	bodyBytes = append(bodyBytes, []byte(body.EstateType))
 	bodyBytes = append(bodyBytes, []byte(body.EstateStatus))
+
 	if body.AccountId != body.Proprietor {
 		appG.Response(http.StatusBadRequest, "失败", "操作人应为本人")
 		return
@@ -59,7 +59,6 @@ func CreateRealEstate(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, "失败", "参数存在空值")
 		return
 	}
-	
 	//调用智能合约
 	resp, err := bc.ChannelExecute("createRealEstate", bodyBytes)
 	if err != nil {

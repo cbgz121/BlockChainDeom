@@ -1,14 +1,5 @@
 <template>
   <div class="container">
-    <!-- <el-alert
-      type="success"
-    >
-      <p>账户ID: {{ accountId }}</p>
-      <p>用户名: {{ userName }}</p>
-      <p>余额: ￥{{ balance }} 元</p>
-      <p>当发起出售、出租后担保状态为true</p>
-      <p>当担保状态为false时，才可发起出售操作</p>
-    </el-alert> -->
     <div v-if="realEstateList.length==0" style="text-align: center;">
       <el-alert
         title="查询不到数据"

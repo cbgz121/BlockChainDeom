@@ -21,7 +21,7 @@
                     <el-input v-model="form.phone"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="openDonatingDialog(val)">认证并获取ID</el-button>
+                    <el-button type="primary" @click="Authen(val)">认证并获取ID</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -44,6 +44,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import {authentication} from '@/api/account'
 export default {
     data() {
         return {
@@ -86,17 +87,36 @@ export default {
                 }
             });
         },
-        openDonatingDialog() {
+        Authen() {
+            // 获取表单组件的引用
+            const form = this.$refs.form;
+
+            // 获取表单数据
+            const formData = form.model;
             this.$refs.form.validate(valid => {
-                setTimeout(() => {
                     if (valid) {
-                        this.dialogCreateDonating = true
-                        this.account = this.accountId
+                       // this.dialogCreateDonating = true
+                        this.$store.dispatch('account/authentication',
+                            {
+                                username: formData.username,
+                                password: formData.password,
+                                name: formData.name,
+                                idcard: formData.idCard,
+                                phone: formData.phone,
+                            }
+                        ).then(accountId => {
+                            this.$message.success("认证成功")
+                            this.dialogCreateDonating = true
+                            this.account = accountId
+                        }).catch((error) => {
+                            alert(error.message)
+                            this.$message.error(error.message)
+                            this.dialogCreateDonating = false
+                        });
                         
                     } else {
                         this.$message.error('请填写正确的信息!');
                     }
-                }, 600)
                 
             });
         },

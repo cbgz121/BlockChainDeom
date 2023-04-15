@@ -29,8 +29,11 @@ func InitRouter() *gin.Engine {
 	apiV1 := r.Group("/api/v1")
 	{
 		apiV1.GET("/hello", v1.Hello)
+                apiV1.GET("/captcha", v1.GetCaptcha)
+                apiV1.POST("/login", v1.Login)
 		apiV1.POST("/register",v1.Register)
 		apiV1.POST("/deleteid",v1.DeleteID)
+                apiV1.POST("/authentication", v1.Authentication)
 		apiV1.POST("/queryAccountList", v1.QueryAccountList)
 		apiV1.POST("/createRealEstate", v1.CreateRealEstate)
 		apiV1.POST("/queryRealEstateList", v1.QueryRealEstateList)
@@ -44,5 +47,6 @@ func InitRouter() *gin.Engine {
 		apiV1.POST("/queryDonatingListByGrantee", v1.QueryDonatingListByGrantee)
 		apiV1.POST("/updateDonating", v1.UpdateDonating)
 	}
+        r.Static("/captcha", "./captcha")
 	return r
 }

@@ -23,6 +23,7 @@ router.beforeEach(async(to, from, next) => {
   const hasToken2 = getTokenPassWord()
 
   if (hasToken) {
+   // alert(getToken())
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({
@@ -42,8 +43,8 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          var roles = await store.dispatch('account/getInfo', {username:hasToken1, password:hasToken2})
-
+         var roles = await store.dispatch('account/getInfo', {username:hasToken1, password:hasToken2})
+          
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 

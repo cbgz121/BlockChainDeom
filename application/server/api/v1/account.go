@@ -27,9 +27,12 @@ func QueryAccountList(c *gin.Context) {
 		appG.Response(http.StatusBadRequest, "失败", fmt.Sprintf("参数出错%s", err.Error()))
 		return
 	}
+        fmt.Println("9999999999999999",body.Username)
+        fmt.Println("777777777777777777", body.Password)
 	var bodyBytes [][]byte
 	bodyBytes = append(bodyBytes, []byte(body.Username))
 	bodyBytes = append(bodyBytes, []byte(body.Password))
+
 	//调用智能合约
 	resp, err := bc.ChannelQuery("queryAccountList", bodyBytes)
 	if err != nil {
@@ -43,12 +46,12 @@ func QueryAccountList(c *gin.Context) {
 		return
 	}
 	fmt.Println(data)
-	if accountId, ok := data[0]["accountId"].(string); ok{
-		if accountIds[accountId] && len(data) == 1 {
-				appG.Response(http.StatusInternalServerError, "失败", "请注册")
-				return
-		}
-	}
+//	if accountId, ok := data[0]["accountId"].(string); ok{
+//		if accountIds[accountId] && len(data) == 1 {
+//				appG.Response(http.StatusInternalServerError, "失败", "请注册")
+//				return
+//		}
+//	}
 	appG.Response(http.StatusOK, "成功", data)
 }
 

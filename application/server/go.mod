@@ -3,7 +3,9 @@ module application
 go 1.18
 
 require (
+	github.com/dchest/captcha v1.0.0
 	github.com/gin-gonic/gin v1.9.0
+	github.com/go-sql-driver/mysql v1.3.0
 	github.com/hyperledger/fabric-sdk-go v1.0.0
 	github.com/robfig/cron/v3 v3.0.0
 )

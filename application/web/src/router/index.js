@@ -32,7 +32,7 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [{
   path: '/login',
-  component: () => import('@/views/login/index2'),
+  component: () => import('@/views/login/index3'),
   hidden: true
 },
 

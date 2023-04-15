@@ -11,7 +11,7 @@ export function queryAccountList() {
 // 登录
 export function login(logindata) {
   return request({
-    url: '/queryAccountList',
+    url: '/login',
     method: 'post',
     data:logindata
   })
@@ -34,3 +34,17 @@ export function register(registerdata) {
   })
 }
 
+export function authentication(authendata) {
+  return request({
+    url: '/authentication',
+    method: 'post',
+    data: authendata
+  })
+}
+
+export function captcha() {
+  return request({
+    url: '/captcha',
+    method: 'get'
+  })
+}
