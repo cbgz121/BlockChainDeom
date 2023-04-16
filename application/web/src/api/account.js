@@ -17,6 +17,15 @@ export function login(logindata) {
   })
 }
 
+// 登录
+export function adminlogin(logindata) {
+  return request({
+    url: '/adminlogin',
+    method: 'post',
+    data:logindata
+  })
+}
+
 // 删除用户
 export function deleteid(logindata) {
   return request({

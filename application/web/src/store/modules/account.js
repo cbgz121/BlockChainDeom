@@ -1,7 +1,8 @@
 import {
   login,
   authentication,
-  queryAccountList
+  queryAccountList,
+  adminlogin
 } from '@/api/account'
 import {
   getToken,
@@ -72,6 +73,28 @@ const actions = {
       })
     })
   },
+
+  adminlogin({
+    commit
+  }, accountIdargs) {
+    return new Promise((resolve, reject) => {
+      adminlogin(
+        accountIdargs
+      ).then(response => {
+        commit('SET_TOKEN', response[0].accountId)
+        commit('SET_USERNAME',response[0].userName)
+        // commit('SET_ACCOUNTID', response[0].accountId)
+        commit('SET_PASSWORD',response[0].passWord)
+        setToken(response[0].userName)
+        setTokenUsername(response[0].userName)
+        setTokenPassword(response[0].passWord)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   authentication({
     commit
   }, accountIdargs) {
@@ -99,27 +122,38 @@ const actions = {
     commit
   }, tokenpass) {
     return new Promise((resolve, reject) => {
-     // alert(tokenpass.username)
+      //alert(tokenpass.username)
+      if (tokenpass.username === 'admin') {
+      adminlogin({
+          username:tokenpass.username,
+          password:tokenpass.password,
+        })
+        .then(response => {
+          const roles = ['admin']
+          commit('SET_ROLES', roles)
+          commit('SET_USERNAME', response[0].userName)
+          commit('SET_ACCOUNTID', response[0].accountId)
+          resolve(roles)
+        })
+        .catch(error => {
+          alert(JSON.stringify(error))
+          reject(error)
+        })
+    } else {
       login({
         username: tokenpass.username,
         password: tokenpass.password
       }).then(response => {
        // alert(tokenpass.username)
-        var roles
-        if (response[0].userName === 'admin') {
-          roles = ['admin']
-        } else {
-          roles = ['editor']
-        }
+        const roles = ['editor']
         commit('SET_ROLES', roles)
         commit('SET_ACCOUNTID', response[0].accountId)
         commit('SET_USERNAME', response[0].userName)
-//        commit('SET_BALANCE', response[0].balance)
-//        alert(response[0].userName)
         resolve(roles)
       }).catch(error => {
         reject(error)
       })
+    }
     })
   },
   logout({

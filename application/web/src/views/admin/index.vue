@@ -2,7 +2,7 @@
     <div class="login-container">
         <el-form ref="loginForm" class="login-form" auto-complete="on" label-position="left">
             <div class="title-container">
-                <h3 class="title">基于区块链的房地产交易系统</h3>
+                <h3 class="title">admin</h3>
             </div>
             <el-form-item label="用户名">
                 <el-input v-model="username" placeholder="请输入用户名"></el-input>
@@ -33,8 +33,8 @@
                 @click.native.prevent="handleLogin">登录</el-button>
 
             <div class="extra-links">
-                <a href="javascript:void(0);" @click="goToRegister">立即注册</a>
-                <a href="javascript:void(0);" @click="goToAdminLogin">管理员登录</a>
+                <!-- <a href="javascript:void(0);" @click="goToRegister">立即注册</a> -->
+                <a href="javascript:void(0);" @click="goToUserLogin">user登录</a>
             </div>
         </el-form>
     </div>
@@ -43,7 +43,7 @@
 import { captcha } from '@/api/account'
 
 export default {
-    name: 'Login',
+    name: 'Login2',
     data() {
         return {
             loading: false,
@@ -76,7 +76,7 @@ export default {
         handleLogin() {
             if (this.username && this.password) {
                 this.loading = true
-                this.$store.dispatch('account/login', { username: this.username, password: this.password }).then(() => {
+                this.$store.dispatch('account/adminlogin', { username: this.username, password: this.password }).then(() => {
                     //alert(this.username)
                     this.$router.push({ path: this.redirect || '/' })
                     this.loading = false
@@ -90,11 +90,11 @@ export default {
             }
         },
 
-        goToRegister() {
-            this.$router.push({ path: '/register' });
-        },
-        goToAdminLogin() {
-            this.$router.push({ path: '/adminlogin' });
+//        goToRegister() {
+//            this.$router.push({ path: '/register' });
+//        },
+        goToUserLogin() {
+            this.$router.push({ path: '/login' });
         },
     },
 };
@@ -149,3 +149,4 @@ export default {
     color: #409EFF;
 }
 </style>
+

@@ -37,6 +37,12 @@ export const constantRoutes = [{
 },
 
 {
+  path: '/adminlogin',
+  name: 'Login2',
+  component: () => import('@/views/admin/index'),
+},
+
+{
   path: '/register',
   name: 'register',
   component: () => import('@/views/register/index')

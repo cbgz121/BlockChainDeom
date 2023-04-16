@@ -8,7 +8,7 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login','/adminlogin'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -21,9 +21,8 @@ router.beforeEach(async(to, from, next) => {
   const hasToken = getToken()
   const hasToken1 = getTokenUserName()
   const hasToken2 = getTokenPassWord()
-
+ 
   if (hasToken) {
-   // alert(getToken())
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({
@@ -34,7 +33,14 @@ router.beforeEach(async(to, from, next) => {
       // if the user wants to access the register page, redirect to the register page
       next()
       NProgress.done()
+    } else if (to.path === '/adminlogin') {
+      // if the user wants to access the admin page, redirect to the admin page
+      next({
+        path: '/'
+     })
+      NProgress.done()
     } else {
+     // alert(hasToken)
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
@@ -43,8 +49,9 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+         //alert(hasToken1)
          var roles = await store.dispatch('account/getInfo', {username:hasToken1, password:hasToken2})
-          
+          //alert(roles)
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
@@ -69,7 +76,7 @@ router.beforeEach(async(to, from, next) => {
   } else {
     /* has no token*/
 
-    if (whiteList.indexOf(to.path) !== -1 || to.path === '/register') {
+    if (whiteList.indexOf(to.path) !== -1 || to.path === '/register' || to.path === '/adminlogin') {
       // in the free login whitelist, go directly
       next()
     } else {
