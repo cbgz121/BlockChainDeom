@@ -32,6 +32,7 @@ func InitRouter() *gin.Engine {
                 apiV1.GET("/captcha", v1.GetCaptcha)
                 apiV1.GET("/allusers", v1.AllUsers)
                 apiV1.POST("/keywordsearch", v1.KeyWordSearch)
+                apiV1.POST("/updatedata", v1.UpdateData)
                 apiV1.POST("/login", v1.Login)
                 apiV1.POST("/adminlogin", v1.AdminLogin)
                 apiV1.POST("/deleteuser", v1.DeleteUser)

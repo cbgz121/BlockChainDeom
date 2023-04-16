@@ -80,3 +80,12 @@ export function keywordsearch(deleteid) {
     data: deleteid
   })
 }
+
+export function updatedata(updatedata) {
+  return request({
+    url: '/updatedata',
+    method: 'post',
+    data: updatedata
+  })
+}
+

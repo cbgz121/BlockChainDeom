@@ -21,6 +21,7 @@ type Userkey struct {
 	PassWord string
 	Email    string
 	Phone    string
+        Status   string
 }
 
 // 定义搜索函数
@@ -47,7 +48,7 @@ func KeyWordSearch(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, "获取表中列失败", err.Error())
 		return
 	}
-	columns = columns[:len(columns)-1]
+	columns = columns[:len(columns)-2]
 
 	// 构造查询语句
 	var conditions []string
@@ -73,7 +74,7 @@ func KeyWordSearch(c *gin.Context) {
 	for rows.Next() {
 		var user Userkey 
 		var storedUserid sql.NullString
-		err := rows.Scan(&user.ID, &user.Name, &user.PassWord, &user.Email, &user.Phone, &storedUserid)
+		err := rows.Scan(&user.ID, &user.Name, &user.PassWord, &user.Email, &user.Phone, &user.Status, &storedUserid)
 		if err != nil {
 			appG.Response(http.StatusInternalServerError, "读取查询结果失败", err.Error())
 			return
@@ -89,7 +90,7 @@ func KeyWordSearch(c *gin.Context) {
 
 	var data []map[string]interface{}
 	for _, v := range users {
-		data = append(data, map[string]interface{}{"ID": v.ID, "userName": v.Name, "passWord": v.PassWord, "email": v.Email, "phone": v.Phone})
+		data = append(data, map[string]interface{}{"ID": v.ID, "userName": v.Name, "passWord": v.PassWord, "email": v.Email, "phone": v.Phone, "status": v.Status})
 	}
 
 	// 将结果返回给客户端

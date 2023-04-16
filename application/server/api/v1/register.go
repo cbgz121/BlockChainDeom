@@ -16,6 +16,7 @@ type RegisterData struct {
 	Password string `json:"password"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
+        Status   string `json:"status"`
 }
 
 func Register(c *gin.Context) {
@@ -27,7 +28,7 @@ func Register(c *gin.Context) {
 	defer db.Close()
         fmt.Println("11111111111111111111111")
 	// 创建用户表格
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS uuu (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), password VARCHAR(50), email VARCHAR(30), phone VARCHAR(20), user_id VARCHAR(30))")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS uuu (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), password VARCHAR(50), email VARCHAR(30), phone VARCHAR(20), status VARCHAR(1), user_id VARCHAR(30))")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -49,7 +50,7 @@ func Register(c *gin.Context) {
         fmt.Println("33333333333333")
 
 	// 在数据库中插入用户
-	_, err = db.Exec("INSERT INTO uuu (name, password, email, phone) VALUES (?, ?, ?, ?)", reqBody.Username, reqBody.Password, reqBody.Email, reqBody.Phone)
+	_, err = db.Exec("INSERT INTO uuu (name, password, email, phone, status) VALUES (?, ?, ?, ?, ?)", reqBody.Username, reqBody.Password, reqBody.Email, reqBody.Phone, reqBody.Status)
 	if err != nil {
                 fmt.Println("4444444444444444")
 		appG.Response(http.StatusInternalServerError, "插入用户失败", fmt.Sprintf("参数出错%s", err.Error()))

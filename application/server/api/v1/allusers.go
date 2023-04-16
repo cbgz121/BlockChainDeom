@@ -15,6 +15,7 @@ type User struct {
 	Password string `json:"password"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
+        Status   int    `json:"status"`
 }
 
 func AllUsers(c *gin.Context) {
@@ -27,7 +28,7 @@ func AllUsers(c *gin.Context) {
 
 		appG := app.Gin{C: c}
 		// 查询所有用户
-		rows, err := db.Query("SELECT id, name, password, email, phone FROM uuu")
+		rows, err := db.Query("SELECT id, name, password, email, phone, status FROM uuu")
 		if err != nil {
 			appG.Response(http.StatusInternalServerError, "查询失败", err.Error())
 			return
@@ -38,7 +39,7 @@ func AllUsers(c *gin.Context) {
 		users := []User{}
 		for rows.Next() {
 			user := User{}
-			err := rows.Scan(&user.ID, &user.Username, &user.Password, &user.Email, &user.Phone)
+			err := rows.Scan(&user.ID, &user.Username, &user.Password, &user.Email, &user.Phone, &user.Status)
 			if err != nil {
 				appG.Response(http.StatusInternalServerError, "Scan失败", err.Error())
 				return
@@ -47,7 +48,7 @@ func AllUsers(c *gin.Context) {
 		}
 		var data []map[string]interface{}
 		for _, value := range users {
-			data = append(data, map[string]interface{}{"ID": value.ID, "passWord": value.Password, "userName": value.Username, "email": value.Email, "phone": value.Phone})
+			data = append(data, map[string]interface{}{"ID": value.ID, "passWord": value.Password, "userName": value.Username, "email": value.Email, "phone": value.Phone, "status": value.Status})
 		}
 
 		// 返回用户列表
