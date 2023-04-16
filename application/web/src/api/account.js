@@ -57,3 +57,26 @@ export function captcha() {
     method: 'get'
   })
 }
+
+export function allusers() {
+  return request({
+    url: '/allusers',
+    method: 'get'
+  })
+}
+
+export function deleteuser(deleteid) {
+  return request({
+    url: '/deleteuser',
+    method: 'post',
+    data: deleteid
+  })
+}
+
+export function keywordsearch(deleteid) {
+  return request({
+    url: '/keywordsearch',
+    method: 'post',
+    data: deleteid
+  })
+}
