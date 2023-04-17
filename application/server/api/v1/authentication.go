@@ -68,8 +68,9 @@ func updateUserByUsername(username string, password string) error {
 	var pwd string
         var email string
         var phone string
+        var status string
         var userid sql.NullString
-	err = row.Scan(&id, &username, &pwd, &email, &phone, &userid)
+	err = row.Scan(&id, &username, &pwd, &email, &phone, &status, &userid)
 	if err != nil {
 		return fmt.Errorf("failed to get user by username: %v", err)
 	}

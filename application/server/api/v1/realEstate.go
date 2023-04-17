@@ -50,7 +50,7 @@ func CreateRealEstate(c *gin.Context) {
 	bodyBytes = append(bodyBytes, []byte(body.BuildYear))
 	bodyBytes = append(bodyBytes, []byte(body.EstateType))
 	bodyBytes = append(bodyBytes, []byte(body.EstateStatus))
-
+        fmt.Println(body.AccountId,"999999999999")
 	if body.AccountId != body.Proprietor {
 		appG.Response(http.StatusBadRequest, "失败", "操作人应为本人")
 		return
