@@ -80,10 +80,11 @@ export default {
                     //alert(this.username)
                     this.$router.push({ path: this.redirect || '/' })
                     this.loading = false
-                }).catch(() => {
-                    this.$message.error('用户名或密码错误')
+                }).catch(error => {
+                    console.log(error.data.error)
+                    this.$message.error(error.data.error)
                     this.loading = false
-                    this.getCaptcha();
+		    this.getCaptcha()
                 })
             } else {
                 this.$message('请输入用户名和密码')

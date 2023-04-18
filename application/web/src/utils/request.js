@@ -12,7 +12,7 @@ const service = axios.create({
 service.interceptors.response.use(
   response => {
     const res = response.data
-    if (res.code !== 200) {
+    if (res.code !== 200) {     
       MessageBox.alert('服务器开小差了'+res.code, 'error', {
         confirmButtonText: '确定',
         type: 'warning'
