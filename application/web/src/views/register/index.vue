@@ -1,6 +1,6 @@
 <template>
     <div class="login-container">
-        <el-form ref="registerForm" class="register-form" auto-complete="on" label-position="left">
+        <el-form ref="registerForm" :rules="rules" class="register-form" auto-complete="on" label-position="left">
             <div class="title-container">
                 <h3 class="title">基于区块链的房地产交易系统</h3>
             </div>
@@ -46,6 +46,13 @@ export default {
             confirmPassword: "",
             email: "",
             phone: "",
+            rules:{
+                    username:[{ required: true, message: '请输入用户名', trigger: 'blur' }, { min: 4, max: 20, message: '用户名长度应为4到20个字符', trigger: 'blur' }], 
+                    email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }],
+                    password:[{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }],
+                    confirmPassword:[{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }],
+                    phone:[{ required: true, message: '请输入手机号', trigger: 'blur' }, { pattern: /^1[34578]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }],
+            },
         };
     },
     watch: {
@@ -95,14 +102,14 @@ $light_gray: #eee;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #e4e0e0;
+ // background-color: #e4e0e0;
 }
 
 .register-form {
   width: 400px;
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   background-color: #ffffff;
 }
 
@@ -115,7 +122,7 @@ $light_gray: #eee;
 .title {
   font-size: 24px;
   font-weight: bold;
-  color: #333333;
+  color: #409eff;
   text-align: center;
 }
 

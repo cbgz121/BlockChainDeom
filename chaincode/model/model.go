@@ -24,6 +24,7 @@ type RealEstate struct {
 	BuildYear     string `json:"buildYear"`
 	EstateType    string  `json:"estateType"`
 	EstateStatus  string  `json:"estateStatus"`
+        Phone         string  `json:"phone"`
 }
 
 // Selling 销售要约
@@ -38,6 +39,7 @@ type Selling struct {
 	CreateTime    string  `json:"createTime"`    //创建时间
 	SalePeriod    int     `json:"salePeriod"`    //智能合约的有效期(单位为天)
 	SellingStatus string  `json:"sellingStatus"` //销售状态
+        EstateType    string  `json:"estateType"`
 }
 
 // SellingStatusConstant 销售状态

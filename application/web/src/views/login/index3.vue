@@ -11,10 +11,10 @@
                 <el-input v-model="password" type="password" placeholder="请输入密码"></el-input>
             </el-form-item>
 
-           <el-form-item label="验证码" class="captcha">
+          <!-- <el-form-item label="验证码" class="captcha">
                 <el-input v-model="captcha" placeholder="请输入验证码"></el-input>
                 <el-image class="captcha-img" :src="`/captcha/${captchaId}.png`" @click="getCaptcha" alt="验证码"></el-image>
-            </el-form-item>
+            </el-form-item> -->
               <!--  <div>
                     <el-form :model="form" ref="form">
                     <el-form-item label="验证码">
@@ -118,9 +118,9 @@ export default {
 }
 
 .login-form {
-    background-color: #fff;
+    background-color: #fffe;
     padding: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
 }
 

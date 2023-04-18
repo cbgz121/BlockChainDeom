@@ -22,6 +22,7 @@ type RealEstateRequestBody struct {
 	BuildYear     string `json:"buildYear"`
 	EstateType    string  `json:"estateType"`
 	EstateStatus  string  `json:"estateStatus"`
+        Phone         string  `json:"phone"`
 }
 
 type RealEstateQueryRequestBody struct {
@@ -50,11 +51,13 @@ func CreateRealEstate(c *gin.Context) {
 	bodyBytes = append(bodyBytes, []byte(body.BuildYear))
 	bodyBytes = append(bodyBytes, []byte(body.EstateType))
 	bodyBytes = append(bodyBytes, []byte(body.EstateStatus))
-        fmt.Println(body.AccountId,"999999999999")
+        bodyBytes = append(bodyBytes, []byte(body.Phone))
+      
 	if body.AccountId != body.Proprietor {
 		appG.Response(http.StatusBadRequest, "失败", "操作人应为本人")
 		return
 	}
+        fmt.Println("9999999999999")
 	if body.AccountId == "" || body.Proprietor == "" || body.TotalArea == 0 || body.LivingSpace == 0 || body.EstateNumber == "" || body.EstateAddress == "" || body.BuildYear == "" || body.EstateType == "" || body.EstateStatus == "" {
 		appG.Response(http.StatusBadRequest, "失败", "参数存在空值")
 		return
@@ -62,6 +65,7 @@ func CreateRealEstate(c *gin.Context) {
 	//调用智能合约
 	resp, err := bc.ChannelExecute("createRealEstate", bodyBytes)
 	if err != nil {
+                fmt.Println(err)
 		appG.Response(http.StatusInternalServerError, "失败", err.Error())
 		return
 	}

@@ -25,10 +25,10 @@
             <el-tag>房产ID: </el-tag>
             <span>{{ val.objectOfSale }}</span>
           </div>
-          <!-- <div class="item">
-            <el-tag type="success">销售者ID: </el-tag>
-            <span>{{ val.seller }}</span>
-          </div> -->
+          <div class="item">
+            <el-tag type="success">房产类型: </el-tag>
+            <span>{{ val.estateType }}</span>
+          </div>
           <div class="item">
             <el-tag type="danger">价格: </el-tag>
             <span>￥{{ val.price }} 元</span>

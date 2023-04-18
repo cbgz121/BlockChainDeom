@@ -14,7 +14,7 @@ import (
 // 定义一个结构体表示需要更新的数据
 type UpData struct {
 	ID       int64  `json:"id"`
-	Name     string `json:"name"`
+	Name     string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
@@ -43,7 +43,7 @@ func UpdateData(c *gin.Context) {
         fmt.Println("111111111111")
 	// 构建更新 SQL 语句
 	var sqlBuilder strings.Builder
-	sqlBuilder.WriteString("UPDATE table SET ")
+	sqlBuilder.WriteString("UPDATE uuu SET ")
 
 	if data.Name != "" {
 		sqlBuilder.WriteString("name = ?, ")
@@ -68,7 +68,7 @@ func UpdateData(c *gin.Context) {
 
 	// 去除末尾的逗号和空格
 	sqlStr := strings.TrimSuffix(sqlBuilder.String(), ", ")
-
+        fmt.Println(sqlStr)
 	// 添加 WHERE 子句
 	sqlStr += " WHERE id = " + strconv.FormatInt(data.ID, 10)
 

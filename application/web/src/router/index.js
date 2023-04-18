@@ -167,7 +167,7 @@ export const asyncRoutes = [
     children: [{
       path: '/addRealestate',
       name: 'AddRealestate',
-      component: () => import('@/views/realestate/add/index3'),
+      component: () => import('@/views/realestate/add/index4'),
       meta: {
         title: '新增房产',
         icon: 'addRealestate'

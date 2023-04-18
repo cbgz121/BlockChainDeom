@@ -18,10 +18,10 @@
             <el-tag>房产ID: </el-tag>
             <span>{{ val.realEstateId }}</span>
           </div>
-          <!-- <div class="item">
-            <el-tag type="success">业主ID: </el-tag>
-            <span>{{ val.proprietor }}</span>
-          </div> -->
+          <div class="item">
+            <el-tag type="success">房产类型: </el-tag>
+            <span>{{ val.estateType }}</span>
+          </div>
           <div class="item">
             <el-tag type="warning">总空间: </el-tag>
             <span>{{ val.totalArea }} ㎡</span>
@@ -180,7 +180,8 @@ export default {
               objectOfSale: this.valItem.realEstateId,
               seller: this.valItem.proprietor,
               price: this.realForm.price,
-              salePeriod: this.realForm.salePeriod
+              salePeriod: this.realForm.salePeriod,
+              estateType: this.valItem.estateType
             }).then(response => {
               this.loadingDialog = false
               this.dialogCreateSelling = false

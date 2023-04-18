@@ -8,8 +8,8 @@
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="form.username"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="form.password"></el-input>
+                <el-form-item  label="密码" prop="password">
+                    <el-input type="password" v-model="form.password"></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" prop="name">
                     <el-input v-model="form.name"></el-input>
@@ -57,12 +57,11 @@ export default {
                 photo: '',
             },
             rules: {
-                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-                name: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }],
-                idCard: [{ required: true, message: '请输入身份证号码', trigger: 'blur' }],
-                phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
-                photo: [{ required: true, message: '请上传照片', trigger: 'blur' }],
+                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }, { min: 4, max: 20, message: '用户名长度应为4到20个字符', trigger: 'blur' }],
+                password: [{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }],
+                name: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }, { pattern: /^[\u4E00-\u9FA5A-Za-z]+$/, message: '姓名只能输入汉字或字母', trigger: 'blur' }],
+                idCard: [{ required: true, message: '请输入身份证号码', trigger: 'blur' }, { pattern: /^\d{18}$/, message: '身份证号码必须为18位数字', trigger: 'blur' }],
+                phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }, { pattern: /^1[34578]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }],
             },
             account: '',
             dialogCreateDonating: false,

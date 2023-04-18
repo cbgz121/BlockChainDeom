@@ -15,7 +15,7 @@ import (
 // CreateRealEstate 新建房地产
 func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// 验证参数
-	if len(args) != 9 {
+	if len(args) != 10 {
 		return shim.Error("参数个数不满足")
 	}
 	accountId := args[0] //accountId用于验证是否为管理员
@@ -27,6 +27,7 @@ func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	buildYear   := args[6]
 	estateType  := args[7]
 	estateStatus := args[8]
+        phone        := args[9]
 	if accountId == "" || proprietor == "" || totalArea == "" || livingSpace == "" || estateNumber == "" || estateAddress == "" || buildYear == "" || estateType == "" || estateStatus == "" {
 		return shim.Error("参数存在空值")
 	}
@@ -69,6 +70,7 @@ func CreateRealEstate(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 		BuildYear: buildYear,
 		EstateType: estateType,
 		EstateStatus: estateStatus,
+                Phone: phone,
 	}
 	// 写入账本
 	if err := utils.WriteLedger(realEstate, stub, model.RealEstateKey, []string{realEstate.Proprietor, realEstate.RealEstateID}); err != nil {

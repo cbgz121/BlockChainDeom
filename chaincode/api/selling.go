@@ -15,14 +15,15 @@ import (
 // CreateSelling 发起销售
 func CreateSelling(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// 验证参数
-	if len(args) != 4 {
+	if len(args) != 5 {
 		return shim.Error("参数个数不满足")
 	}
 	objectOfSale := args[0]
 	seller := args[1]
 	price := args[2]
 	salePeriod := args[3]
-	if objectOfSale == "" || seller == "" || price == "" || salePeriod == "" {
+        estateType := args[4]
+	if objectOfSale == "" || seller == "" || price == "" || salePeriod == "" || estateType == "" {
 		return shim.Error("参数存在空值")
 	}
 	// 参数数据格式转换
@@ -61,6 +62,7 @@ func CreateSelling(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 		CreateTime:    time.Unix(int64(createTime.GetSeconds()), int64(createTime.GetNanos())).Local().Format("2006-01-02 15:04:05"),
 		SalePeriod:    formattedSalePeriod,
 		SellingStatus: model.SellingStatusConstant()["saleStart"],
+                EstateType: estateType,
 	}
 	// 写入账本
 	if err := utils.WriteLedger(selling, stub, model.SellingKey, []string{selling.Seller, selling.ObjectOfSale}); err != nil {

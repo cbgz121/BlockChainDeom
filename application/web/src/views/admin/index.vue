@@ -2,7 +2,7 @@
     <div class="login-container">
         <el-form ref="loginForm" class="login-form" auto-complete="on" label-position="left">
             <div class="title-container">
-                <h3 class="title">admin</h3>
+                <h3 class="title">管理员登陆</h3>
             </div>
             <el-form-item label="用户名">
                 <el-input v-model="username" placeholder="请输入用户名"></el-input>
@@ -11,10 +11,10 @@
                 <el-input v-model="password" type="password" placeholder="请输入密码"></el-input>
             </el-form-item>
 
-           <el-form-item label="验证码" class="captcha">
+         <!-- <el-form-item label="验证码" class="captcha">
                 <el-input v-model="captcha" placeholder="请输入验证码"></el-input>
                 <el-image class="captcha-img" :src="`/captcha/${captchaId}.png`" @click="getCaptcha" alt="验证码"></el-image>
-            </el-form-item>
+            </el-form-item>  -->
               <!--  <div>
                     <el-form :model="form" ref="form">
                     <el-form-item label="验证码">
@@ -34,7 +34,7 @@
 
             <div class="extra-links">
                 <!-- <a href="javascript:void(0);" @click="goToRegister">立即注册</a> -->
-                <a href="javascript:void(0);" @click="goToUserLogin">user登录</a>
+                <a href="javascript:void(0);" @click="goToUserLogin">用户登录</a>
             </div>
         </el-form>
     </div>
@@ -120,7 +120,7 @@ export default {
 .login-form {
     background-color: #fff;
     padding: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
 }
 

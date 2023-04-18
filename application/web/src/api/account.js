@@ -89,3 +89,19 @@ export function updatedata(updatedata) {
   })
 }
 
+export function uploadimg(updatedata) {
+  return request({
+    url: '/uploadimg',
+    method: 'post',
+    data: updatedata
+  })
+}
+
+export function getimg() {
+  return request({
+    url: '/getimg',
+    method: 'get',
+    responseType: 'arraybuffer'
+  })
+}
+

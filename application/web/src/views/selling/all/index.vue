@@ -20,16 +20,16 @@
             <span>{{ val.sellingStatus }}</span>
             <el-button v-if="roles[0] !== 'admin'&&(val.seller===accountId||val.buyer===accountId)&&val.sellingStatus!=='完成'&&val.sellingStatus!=='已过期'&&val.sellingStatus!=='已取消'" style="float: right; padding: 3px 0" type="text" @click="updateSelling(val,'cancelled')">取消</el-button>
             <el-button v-if="roles[0] !== 'admin'&&val.seller===accountId&&val.sellingStatus==='交付中'" style="float: right; padding: 3px 8px" type="text" @click="updateSelling(val,'done')">确认收款</el-button>
-            <el-button v-if="roles[0] !== 'admin'&&val.sellingStatus==='销售中'&&val.seller!==accountId" style="float: right; padding: 3px 0" type="text" @click="createSellingByBuy(val)">购买</el-button>
+            <el-button v-if="roles[0] !== 'admin'&&val.sellingStatus==='销售中'&&val.seller!==accountId" style="float: right; padding: 3px 0" type="text" @click="createSellingByBuy(val)">联系房主</el-button>
           </div>
           <div class="item">
             <el-tag>房产ID: </el-tag>
             <span>{{ val.objectOfSale }}</span>
           </div>
-          <!-- <div class="item">
-            <el-tag type="success">销售者ID: </el-tag>
-            <span>{{ val.seller }}</span>
-          </div> -->
+           <div class="item">
+            <el-tag type="success">房产类型: </el-tag>
+            <span>{{ val.estateType }}</span>
+          </div>
           <div class="item">
             <el-tag type="danger">价格: </el-tag>
             <span>￥{{ val.price }} 元</span>
@@ -68,6 +68,16 @@
           </el-form>
         </el-form>
       </el-dialog>
+      <el-dialog v-loading="loadingDialog" :visible.sync="dialogphone" :close-on-click-modal="false" @close="resetForm('DonatingForm')" style="width: 700px;top: 20%; left: 30%;">
+          <el-form ref="DonatingForm" :model="DonatingForm" :rules="rulesDonating" label-width="100px">
+            <el-form style="width: 100%" v-for="(account, index) in sellerphone" :key="index">
+            <el-form-item :label="'房主电话: ' + account.phone"></el-form-item>
+            </el-form>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="confirm()">确定</el-button>
+          </div>
+        </el-dialog>
   </div>
 </template>
 
@@ -81,6 +91,8 @@ export default {
   data() {
     return {
       dialogCreateDonating: false,
+      dialogphone: false,
+      sellerphone: [],
       loading: true,
       sellingList: [],
       accountList: []
@@ -106,42 +118,26 @@ export default {
   },
   methods: {
     createSellingByBuy(item) {
-      this.$confirm('是否立即购买?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'success'
-      }).then(() => {
+      if (this.accountId === '-11111') {
+          this.$confirm('请进行身份认证', '提示', {
+          // confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {}).catch(() => {
+          this.loading = false
+        })
+      } else {
         this.loading = true
-        createSellingByBuy({
-          buyer: this.accountId,
-          objectOfSale: item.objectOfSale,
-          seller: item.seller
+        queryRealEstateList({
+          proprietor: item.seller
         }).then(response => {
           this.loading = false
-          if (response !== null) {
-            this.$message({
-              type: 'success',
-              message: '购买成功!'
-            })
-          } else {
-            this.$message({
-              type: 'error',
-              message: '购买失败!'
-            })
-          }
-          setTimeout(() => {
-            window.location.reload()
-          }, 1000)
+          this.dialogphone = true
+          this.sellerphone = response
         }).catch(_ => {
           this.loading = false
         })
-      }).catch(() => {
-        this.loading = false
-        this.$message({
-          type: 'info',
-          message: '已取消购买'
-        })
-      })
+      }
     },
     openDonatingDialog(item) {
       this.dialogCreateDonating = true
@@ -153,6 +149,9 @@ export default {
           )
         }
       })
+    },
+    confirm() {
+	this.dialogphone = false
     },
     updateSelling(item, type) {
       let tip = ''
