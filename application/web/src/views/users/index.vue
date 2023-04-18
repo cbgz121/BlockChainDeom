@@ -30,22 +30,22 @@
         </el-table>
         <el-pagination :total="total" :current-page="currentPage" :page-size="pageSize" @current-change="handlePageChange"
             class="pagination"></el-pagination>
-        <el-dialog :visible.sync="showEditDialog" title="编辑用户" :append-to-body="true" :fullscreen="true">
+        <el-dialog :visible.sync="showEditDialog" title="编辑用户" :append-to-body="true" :fullscreen="true" style="width: 700px; top: 20%; left: 30%; height: 500px;" center>
             <el-form ref="editForm" :model="editForm" label-width="120px">
                 <el-form-item label="用户名" prop="username" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
-                    <el-input v-model="editForm.username" placeholder="请输入用户名"></el-input>
+                    <el-input class="short-input" v-model="editForm.username" placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password"
                     :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }]">
-                    <el-input type="password" v-model="editForm.password" placeholder="请输入密码"></el-input>
+                    <el-input class="short-input" type="password" v-model="editForm.password" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email"
                     :rules="[{ required: true, message: '请输入邮箱', trigger: 'blur' }, { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }]">
-                    <el-input v-model="editForm.email" placeholder="请输入邮箱"></el-input>
+                    <el-input class="short-input" v-model="editForm.email" placeholder="请输入邮箱"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号" prop="phone"
                     :rules="[{ required: true, message: '请输入手机号', trigger: 'blur' }, { pattern: /^1[34578]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }]">
-                    <el-input v-model="editForm.phone" placeholder="请输入手机号"></el-input>
+                    <el-input class="short-input" v-model="editForm.phone" placeholder="请输入手机号"></el-input>
                 </el-form-item>
                 <el-form-item label="状态" prop="status" :rules="[{ required: true, message: '请选择状态', trigger: 'blur' }]">
                     <el-radio-group v-model="editForm.status">
@@ -60,26 +60,26 @@
             </div>
         </el-dialog>
 
-        <el-dialog :visible.sync="showAddDialog" title="新增用户" :append-to-body="true" :fullscreen="true">
+        <el-dialog :visible.sync="showAddDialog" title="新增用户" :append-to-body="true" :fullscreen="true" style="width: 700px; top: 20%; left: 30%; height: 600px;" center>
                 <el-form ref="AddForm" :model="AddForm" label-width="120px">
                     <el-form-item label="用户名" prop="username" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
-                        <el-input v-model="AddForm.username" placeholder="请输入用户名"></el-input>
+                        <el-input class="short-input" v-model="AddForm.username" placeholder="请输入用户名"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password"
                         :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }]">
-                        <el-input type="password" v-model="AddForm.password" placeholder="请输入密码"></el-input>
+                        <el-input class="short-input" type="password" v-model="AddForm.password" placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item label="确认密码" prop="password"
                             :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }]">
-                            <el-input type="password" v-model="AddForm.confirmPassword" placeholder="请输入密码"></el-input>
+                            <el-input class="short-input" type="password" v-model="AddForm.confirmPassword" placeholder="请输入密码"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱" prop="email"
                         :rules="[{ required: true, message: '请输入邮箱', trigger: 'blur' }, { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }]">
-                        <el-input v-model="AddForm.email" placeholder="请输入邮箱"></el-input>
+                        <el-input class="short-input" v-model="AddForm.email" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号" prop="phone"
                         :rules="[{ required: true, message: '请输入手机号', trigger: 'blur' }, { pattern: /^1[34578]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }]">
-                        <el-input v-model="AddForm.phone" placeholder="请输入手机号"></el-input>
+                        <el-input class="short-input" v-model="AddForm.phone" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="状态" prop="status" :rules="[{ required: true, message: '请选择状态', trigger: 'blur' }]">
                         <el-radio-group v-model="AddForm.status">
@@ -297,6 +297,20 @@ export default {
 
 .user-form {
     width: 400px;
+}
+.short-input {
+    width: 350px;
+}
+
+.form-item-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.form-item-inline label {
+    flex-basis: 120px;
+    flex-shrink: 0;
+    margin-right: 20px;
 }
 </style>
 
