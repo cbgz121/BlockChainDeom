@@ -1,0 +1,107 @@
+import request from '@/utils/request'
+
+//获取登录界面角色选择列表
+export function queryAccountList() {
+  return request({
+    url: '/queryAccountList',
+    method: 'post'
+  })
+}
+
+// 登录
+export function login(logindata) {
+  return request({
+    url: '/login',
+    method: 'post',
+    data:logindata
+  })
+}
+
+// 登录
+export function adminlogin(logindata) {
+  return request({
+    url: '/adminlogin',
+    method: 'post',
+    data:logindata
+  })
+}
+
+// 删除用户
+export function deleteid(logindata) {
+  return request({
+    url: '/deleteid',
+    method: 'post',
+    data: logindata
+  })
+}
+
+export function register(registerdata) {
+  return request({
+    url: '/register',
+    method: 'post',
+    data: registerdata
+  })
+}
+
+export function authentication(authendata) {
+  return request({
+    url: '/authentication',
+    method: 'post',
+    data: authendata
+  })
+}
+
+export function captcha() {
+  return request({
+    url: '/captcha',
+    method: 'get'
+  })
+}
+
+export function allusers() {
+  return request({
+    url: '/allusers',
+    method: 'get'
+  })
+}
+
+export function deleteuser(deleteid) {
+  return request({
+    url: '/deleteuser',
+    method: 'post',
+    data: deleteid
+  })
+}
+
+export function keywordsearch(deleteid) {
+  return request({
+    url: '/keywordsearch',
+    method: 'post',
+    data: deleteid
+  })
+}
+
+export function updatedata(updatedata) {
+  return request({
+    url: '/updatedata',
+    method: 'post',
+    data: updatedata
+  })
+}
+
+export function uploadimg(updatedata) {
+  return request({
+    url: '/uploadimg',
+    method: 'post',
+    data: updatedata
+  })
+}
+
+export function getimg() {
+  return request({
+    url: '/getimg',
+    method: 'get',
+    responseType: 'arraybuffer'
+  })
+}
+
